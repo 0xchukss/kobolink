@@ -3,6 +3,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
 import { config } from "../config/env.js";
+import { ensureKobolinkSchema, getSql, jsonb, postgresEnabled } from "../db/postgres.js";
 import type { XUrlLiveProof } from "./x-url-proof.js";
 import { ngnToKobo } from "../utils/currency.js";
 import {
@@ -53,12 +54,13 @@ export type PublicCreatorFeedItem = PublicFeedItem & {
 
 const fallbackStorePath = "data/creator-listings.json";
 export async function readCreatorListingRecords(path?: string): Promise<CreatorListingRecord[]> {
+  if (!path && postgresEnabled()) return readPostgresRecords();
   return readLocalRecords(resolveStorePath(path));
 }
 
 export async function readPublicCreatorFeed(path?: string): Promise<PublicCreatorFeedItem[]> {
-  const localRecords = await readLocalRecords(resolveStorePath(path));
-  return localRecords.filter(isCurrentCreatorAttachedRecord).map((record) => toPublicFeedItem(record, "local"));
+  const records = await readCreatorListingRecords(path);
+  return records.filter(isCurrentCreatorAttachedRecord).map((record) => toPublicFeedItem(record, "local"));
 }
 
 export async function createStoredCreatorListing(
@@ -69,7 +71,6 @@ export async function createStoredCreatorListing(
   const category = parseCategory(input.category);
   const type = parseContentType(input.type ?? "x-thread");
   const suggestedTipNgn = parseAmount(input.suggestedTipNgn);
-  const storePath = resolveStorePath(path);
 
   if (type !== "x-thread") {
     throw new Error("KoboLink real-mode listings must be creator-attached X status posts.");
@@ -107,11 +108,38 @@ export async function createStoredCreatorListing(
     xUrlProof: assertLiveUrlProof(input.xUrlProof, listing),
     createdAt,
   };
-  const records = await readLocalRecords(storePath);
-  records.unshift(record);
-  await writeLocalRecords(records, storePath);
+  if (!path && postgresEnabled()) {
+    await writePostgresRecord(record);
+  } else {
+    const storePath = resolveStorePath(path);
+    const records = await readLocalRecords(storePath);
+    records.unshift(record);
+    await writeLocalRecords(records, storePath);
+  }
 
   return toPublicFeedItem(record, "local");
+}
+
+async function readPostgresRecords(): Promise<CreatorListingRecord[]> {
+  await ensureKobolinkSchema();
+  const sql = getSql();
+  const rows = (await sql`
+    select item
+    from kobolink_creator_listings
+    order by created_at desc
+  `) as Array<{ item: CreatorListingRecord }>;
+  return rows.map((row) => row.item);
+}
+
+async function writePostgresRecord(record: CreatorListingRecord): Promise<void> {
+  await ensureKobolinkSchema();
+  const sql = getSql();
+  await sql`
+    insert into kobolink_creator_listings (id, item, created_at, updated_at)
+    values (${record.listing.id}, ${jsonb(record)}::jsonb, ${record.createdAt}, now())
+    on conflict (id)
+    do update set item = excluded.item, updated_at = now()
+  `;
 }
 
 async function readLocalRecords(path: string): Promise<CreatorListingRecord[]> {

@@ -2,7 +2,8 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 
 import { getFlutterwaveConfigStatus } from "./config.js";
-import { type BridgeWithdrawalReceipt, type FlutterwaveBridgeSnapshot, type FlutterwaveDepositReceipt } from "./bridge.js";
+import { isCreditedFlutterwaveDeposit, type BridgeWithdrawalReceipt, type FlutterwaveBridgeSnapshot, type FlutterwaveDepositReceipt } from "./bridge.js";
+import { ensureKobolinkSchema, getSql, jsonb, postgresEnabled } from "../db/postgres.js";
 import { findStrictVerifiedFlutterwaveDeposit, type StrictBridgeCheckoutProof, type StrictBridgeDepositProof } from "../proofs/bridge-proof-evidence.js";
 
 const fallbackPath = "data/flutterwave-bridge.json";
@@ -15,8 +16,10 @@ type BridgeFileState = {
 
 export async function readBridgeState(path?: string): Promise<FlutterwaveBridgeSnapshot> {
   const state = await readBridgeFile(path);
-  const strictDeposit = await readStrictVerifiedDeposit(state.deposits, path);
-  return toSnapshot(state, strictDeposit ? [strictDeposit] : []);
+  const proofBackedDeposits = !path && postgresEnabled()
+    ? state.deposits.filter(isCreditedFlutterwaveDeposit)
+    : compact([await readStrictVerifiedDeposit(state.deposits, path)]);
+  return toSnapshot(state, proofBackedDeposits);
 }
 
 export async function upsertDepositReceipt(receipt: FlutterwaveDepositReceipt, path?: string): Promise<FlutterwaveBridgeSnapshot> {
@@ -72,23 +75,26 @@ export function publicWithdrawalReceipt(receipt: BridgeWithdrawalReceipt): Bridg
 }
 
 async function readBridgeFile(path?: string): Promise<BridgeFileState> {
+  if (!path && postgresEnabled()) return readPostgresBridgeState();
+
   try {
     const raw = await readFile(/* turbopackIgnore: true */ resolveBridgePath(path), "utf8");
     const parsed = JSON.parse(raw) as BridgeFileState;
-    return {
-      deposits: Array.isArray(parsed.deposits) ? parsed.deposits : [],
-      withdrawals: Array.isArray(parsed.withdrawals) ? parsed.withdrawals.filter(isRealFlutterwaveWithdrawal) : [],
-      updatedAt: parsed.updatedAt ?? new Date().toISOString(),
-    };
+    return normalizeBridgeState(parsed);
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-      return { deposits: [], withdrawals: [], updatedAt: new Date().toISOString() };
+      return emptyBridgeState();
     }
     throw error;
   }
 }
 
 async function writeBridgeFile(state: BridgeFileState, path?: string): Promise<void> {
+  if (!path && postgresEnabled()) {
+    await writePostgresBridgeState(state);
+    return;
+  }
+
   const resolvedPath = resolveBridgePath(path);
   await mkdir(/* turbopackIgnore: true */ dirname(resolvedPath), { recursive: true });
   await writeFile(/* turbopackIgnore: true */ resolvedPath, `${JSON.stringify(state, null, 2)}\n`, "utf8");
@@ -133,6 +139,45 @@ async function readJsonIfExists<T>(path: string): Promise<T | undefined> {
 function resolveProofPath(filename: string, bridgePath?: string): string {
   if (bridgePath) return join(dirname(resolveBridgePath(bridgePath)), filename);
   return join("proofs", filename);
+}
+
+async function readPostgresBridgeState(): Promise<BridgeFileState> {
+  await ensureKobolinkSchema();
+  const sql = getSql();
+  const rows = (await sql`
+    select state
+    from kobolink_flutterwave_bridge
+    where id = ${"default"}
+    limit 1
+  `) as Array<{ state: BridgeFileState }>;
+  return rows[0]?.state ? normalizeBridgeState(rows[0].state) : emptyBridgeState();
+}
+
+async function writePostgresBridgeState(state: BridgeFileState): Promise<void> {
+  await ensureKobolinkSchema();
+  const sql = getSql();
+  await sql`
+    insert into kobolink_flutterwave_bridge (id, state, updated_at)
+    values (${"default"}, ${jsonb(state)}::jsonb, now())
+    on conflict (id)
+    do update set state = excluded.state, updated_at = now()
+  `;
+}
+
+function normalizeBridgeState(state: BridgeFileState): BridgeFileState {
+  return {
+    deposits: Array.isArray(state.deposits) ? state.deposits : [],
+    withdrawals: Array.isArray(state.withdrawals) ? state.withdrawals.filter(isRealFlutterwaveWithdrawal) : [],
+    updatedAt: state.updatedAt ?? new Date().toISOString(),
+  };
+}
+
+function emptyBridgeState(): BridgeFileState {
+  return { deposits: [], withdrawals: [], updatedAt: new Date().toISOString() };
+}
+
+function compact<T>(items: Array<T | undefined>): T[] {
+  return items.filter((item): item is T => item !== undefined);
 }
 
 function isRealFlutterwaveWithdrawal(receipt: BridgeWithdrawalReceipt): boolean {

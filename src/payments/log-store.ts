@@ -1,6 +1,7 @@
 import { mkdir, appendFile, readFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
+import { ensureKobolinkSchema, getSql, jsonb, postgresEnabled } from "../db/postgres.js";
 import { balancesFromLogs, hasSettlementProof, type CreatorBalance, type FeedItem, type PaymentLog } from "./tips.js";
 
 const fallbackPath = "data/payment-logs.jsonl";
@@ -11,12 +12,19 @@ export type PaymentState = {
 };
 
 export async function appendPaymentLog(log: PaymentLog, path?: string): Promise<void> {
+  if (!path && postgresEnabled()) {
+    await appendPostgresPaymentLog(log);
+    return;
+  }
+
   const resolvedPath = resolvePaymentLogPath(path);
   await mkdir(/* turbopackIgnore: true */ dirname(resolvedPath), { recursive: true });
   await appendFile(/* turbopackIgnore: true */ resolvedPath, `${JSON.stringify(log)}\n`, "utf8");
 }
 
 export async function readPaymentLogs(path?: string): Promise<PaymentLog[]> {
+  if (!path && postgresEnabled()) return readPostgresPaymentLogs();
+
   try {
     const rows = await readFile(/* turbopackIgnore: true */ resolvePaymentLogPath(path), "utf8");
     return rows.trim() ? rows.trim().split("\n").map((row) => JSON.parse(row) as PaymentLog) : [];
@@ -71,6 +79,28 @@ function paymentStateFromLogs(logs: PaymentLog[]): PaymentState {
 export function isCurrentPaymentLog(log: PaymentLog): boolean {
   if (log.status !== "settled") return Boolean(log.createdAt);
   return hasSettlementProof(log) && Boolean(log.createdAt) && Boolean(log.paymentReceipt || log.explorerUrl);
+}
+
+async function appendPostgresPaymentLog(log: PaymentLog): Promise<void> {
+  await ensureKobolinkSchema();
+  const sql = getSql();
+  await sql`
+    insert into kobolink_payment_logs (id, log, settled_at, created_at)
+    values (${log.id}, ${jsonb(log)}::jsonb, ${log.settledAt ?? null}, ${log.createdAt})
+    on conflict (id)
+    do update set log = excluded.log, settled_at = excluded.settled_at
+  `;
+}
+
+async function readPostgresPaymentLogs(): Promise<PaymentLog[]> {
+  await ensureKobolinkSchema();
+  const sql = getSql();
+  const rows = (await sql`
+    select log
+    from kobolink_payment_logs
+    order by created_at asc
+  `) as Array<{ log: PaymentLog }>;
+  return rows.map((row) => row.log);
 }
 
 function resolvePaymentLogPath(path?: string): string {

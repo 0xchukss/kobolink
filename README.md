@@ -113,6 +113,10 @@ npm run proof:bridge-status   # status-only; does not create bridge receipts
 npm run proof:full
 ```
 
+## Neon Postgres Persistence
+
+Set `DATABASE_URL` from Neon and `AGENT_WALLET_ENCRYPTION_KEY` before production use. The app lazily creates the tables in `src/db/schema.sql` and uses Neon only when `DATABASE_URL` exists; local JSON remains the fallback for CLI tests and development without a database. Per-user agent wallet private keys are encrypted with `AGENT_WALLET_ENCRYPTION_KEY` before being stored.
+
 ## Test Evidence
 
 ```bash
@@ -138,7 +142,7 @@ The verifier currently has five red checks. Complete them in this order:
 - Listing uses creator-attached X status links only. KoboLink does not post to X, expose X OAuth routes, scrape X, or auto-detect post content for the creator listing flow.
 - Flutterwave checkout, deposit verification, and payout now have strict `proof:bridge-*` commands. Payout still requires settled creator tip earnings and the sandbox account to pass IP whitelisting before `/v3/transfers` returns an accepted payout status.
 - Flutterwave is not the creator-tip settlement rail; tips settle through Arc/Circle/x402 as USDC.
-- Data is local JSON for hackathon repeatability, not a production database. For a public deployment, move creator listings, payment logs, budget ledgers, and per-user agent private keys into a durable database/KMS-backed store.
+- Without `DATABASE_URL`, data falls back to local JSON for hackathon repeatability. With Neon Postgres configured, creator listings, payment logs, Flutterwave bridge receipts, fan budget ledgers, and encrypted per-user agent wallets persist durably.
 - Mainnet payouts are not included.
 
 ## Roadmap

@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, isAbsolute, join } from "node:path";
 
+import { ensureKobolinkSchema, getSql, jsonb, postgresEnabled } from "../db/postgres.js";
 import { budgetLedger, type BudgetState, type FanBudget, type GatewayBalanceSnapshot } from "./fan-budget.js";
 
 const fallbackFileName = "fan-budget.json";
@@ -41,15 +42,56 @@ function resolveBudgetPath(path?: string): string {
 }
 
 export async function readFanBudgetForOwner(ownerId: string): Promise<FanBudget | null> {
-  return readFanBudget(ownerBudgetPath(ownerId));
+  const safeOwnerId = normalizeOwnerId(ownerId);
+  if (postgresEnabled()) return readPostgresFanBudget(safeOwnerId);
+  return readFanBudget(ownerBudgetPath(safeOwnerId));
 }
 
 export async function writeFanBudgetForOwner(ownerId: string, budget: FanBudget): Promise<void> {
-  return writeFanBudget(budget, ownerBudgetPath(ownerId));
+  const safeOwnerId = normalizeOwnerId(ownerId);
+  if (postgresEnabled()) {
+    await writePostgresFanBudget(safeOwnerId, budget);
+    return;
+  }
+  return writeFanBudget(budget, ownerBudgetPath(safeOwnerId));
 }
 
 export async function readStoredBudgetStateForOwner(ownerId: string, wallet: GatewayBalanceSnapshot | null = null): Promise<BudgetState> {
-  return readStoredBudgetState(ownerBudgetPath(ownerId), wallet);
+  const budget = await readFanBudgetForOwner(ownerId);
+  return {
+    budget,
+    ledger: budget ? budgetLedger(budget) : null,
+    wallet,
+  };
+}
+
+async function readPostgresFanBudget(ownerId: string): Promise<FanBudget | null> {
+  await ensureKobolinkSchema();
+  const sql = getSql();
+  const rows = (await sql`
+    select budget
+    from kobolink_fan_budgets
+    where owner_id = ${ownerId}
+    limit 1
+  `) as Array<{ budget: FanBudget }>;
+  return rows[0]?.budget ?? null;
+}
+
+async function writePostgresFanBudget(ownerId: string, budget: FanBudget): Promise<void> {
+  await ensureKobolinkSchema();
+  const sql = getSql();
+  await sql`
+    insert into kobolink_fan_budgets (owner_id, budget, updated_at)
+    values (${ownerId}, ${jsonb(budget)}::jsonb, now())
+    on conflict (owner_id)
+    do update set budget = excluded.budget, updated_at = now()
+  `;
+}
+
+function normalizeOwnerId(ownerId: string): string {
+  const normalized = ownerId.trim();
+  if (!normalized) throw new Error("owner id is required for a fan budget.");
+  return normalized;
 }
 
 function ownerBudgetPath(ownerId: string): string {
