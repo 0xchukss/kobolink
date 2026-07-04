@@ -1,0 +1,256 @@
+{
+  "project": "KoboLink",
+  "phase": "day-5-autonomous-agent-real-payments",
+  "recordedAt": "2026-06-29T18:16:10.840Z",
+  "runId": "zjgu6d",
+  "success": true,
+  "targetTipCount": 3,
+  "requiredRunUsdc": 0.354838,
+  "wallet": {
+    "fanAddress": "0x6BAeB217DBF5B53c9A1Ba88750fFF6c0cA7931E3",
+    "walletUsdc": 18.995901,
+    "gatewayAvailableUsdc": 0.635162,
+    "gatewayTotalUsdc": 0.635162,
+    "requiredBudgetUsdc": 1.290323,
+    "fullyFunded": false,
+    "checkedAt": "2026-06-29T18:16:06.965Z"
+  },
+  "ledger": {
+    "fundedNgn": 2000,
+    "fundedUsdc": 1.290323,
+    "reservedNgn": 0,
+    "reservedUsdc": 0,
+    "spentNgn": 550,
+    "spentUsdc": 0.354838,
+    "remainingNgn": 1450,
+    "remainingUsdc": 0.935485
+  },
+  "createdListings": [
+    {
+      "id": "listing-5ed68a63-53b9-465d-921d-e98363dc81d7",
+      "creatorHandle": "@klaizjgu6d",
+      "category": "ai",
+      "amountNgn": 150,
+      "amountUsdc": 0.096774,
+      "x402PaymentPath": "/x402/pay/listing-5ed68a63-53b9-465d-921d-e98363dc81d7"
+    },
+    {
+      "id": "listing-e0e42803-4d3b-4228-a298-55dc72cbc3ca",
+      "creatorHandle": "@klfinzjgu6d",
+      "category": "fintech",
+      "amountNgn": 250,
+      "amountUsdc": 0.16129,
+      "x402PaymentPath": "/x402/pay/listing-e0e42803-4d3b-4228-a298-55dc72cbc3ca"
+    },
+    {
+      "id": "listing-8314cfad-7ae5-4406-9b51-64eef7cb0bff",
+      "creatorHandle": "@klstzjgu6d",
+      "category": "startups",
+      "amountNgn": 150,
+      "amountUsdc": 0.096774,
+      "x402PaymentPath": "/x402/pay/listing-8314cfad-7ae5-4406-9b51-64eef7cb0bff"
+    }
+  ],
+  "tipped": [
+    {
+      "creatorHandle": "@klstzjgu6d",
+      "listingId": "listing-8314cfad-7ae5-4406-9b51-64eef7cb0bff",
+      "amountNgn": 150,
+      "amountUsdc": 0.096774,
+      "paymentReceipt": "42837b7a-f604-4d36-8553-2d8f2e27c28b",
+      "receiptUrl": "https://gateway-api-testnet.circle.com/v1/transfers/42837b7a-f604-4d36-8553-2d8f2e27c28b",
+      "network": "eip155:5042002",
+      "settledAt": "2026-06-29T18:16:08.203Z"
+    },
+    {
+      "creatorHandle": "@klfinzjgu6d",
+      "listingId": "listing-e0e42803-4d3b-4228-a298-55dc72cbc3ca",
+      "amountNgn": 250,
+      "amountUsdc": 0.16129,
+      "paymentReceipt": "bd6ca8c6-83ac-4f08-b496-46a8fab790d6",
+      "receiptUrl": "https://gateway-api-testnet.circle.com/v1/transfers/bd6ca8c6-83ac-4f08-b496-46a8fab790d6",
+      "network": "eip155:5042002",
+      "settledAt": "2026-06-29T18:16:09.370Z"
+    },
+    {
+      "creatorHandle": "@klaizjgu6d",
+      "listingId": "listing-5ed68a63-53b9-465d-921d-e98363dc81d7",
+      "amountNgn": 150,
+      "amountUsdc": 0.096774,
+      "paymentReceipt": "3e1f85cc-bb6d-49c8-a79a-bd8daca43b0a",
+      "receiptUrl": "https://gateway-api-testnet.circle.com/v1/transfers/3e1f85cc-bb6d-49c8-a79a-bd8daca43b0a",
+      "network": "eip155:5042002",
+      "settledAt": "2026-06-29T18:16:10.569Z"
+    }
+  ],
+  "decisions": [
+    {
+      "listingId": "listing-8314cfad-7ae5-4406-9b51-64eef7cb0bff",
+      "creatorHandle": "@klstzjgu6d",
+      "status": "tipped",
+      "amountNgn": 150,
+      "amountUsdc": 0.096774,
+      "score": 105,
+      "reason": "Tipped: startups matched policy, score 105, and x402 settled with proof 42837b7a-f604-4d36-8553-2d8f2e27c28b.",
+      "scoring": {
+        "categoryMatch": true,
+        "creatorReputation": 25,
+        "suggestedTipAffordable": true,
+        "contentQuality": "high-signal",
+        "budgetRemainingBeforeNgn": 2000,
+        "gatewayRemainingBeforeUsdc": 0.635162
+      },
+      "proof": {
+        "paymentReceipt": "42837b7a-f604-4d36-8553-2d8f2e27c28b",
+        "receiptUrl": "https://gateway-api-testnet.circle.com/v1/transfers/42837b7a-f604-4d36-8553-2d8f2e27c28b",
+        "network": "eip155:5042002"
+      }
+    },
+    {
+      "listingId": "listing-e0e42803-4d3b-4228-a298-55dc72cbc3ca",
+      "creatorHandle": "@klfinzjgu6d",
+      "status": "tipped",
+      "amountNgn": 250,
+      "amountUsdc": 0.16129,
+      "score": 105,
+      "reason": "Tipped: fintech matched policy, score 105, and x402 settled with proof bd6ca8c6-83ac-4f08-b496-46a8fab790d6.",
+      "scoring": {
+        "categoryMatch": true,
+        "creatorReputation": 25,
+        "suggestedTipAffordable": true,
+        "contentQuality": "high-signal",
+        "budgetRemainingBeforeNgn": 1850,
+        "gatewayRemainingBeforeUsdc": 0.538388
+      },
+      "proof": {
+        "paymentReceipt": "bd6ca8c6-83ac-4f08-b496-46a8fab790d6",
+        "receiptUrl": "https://gateway-api-testnet.circle.com/v1/transfers/bd6ca8c6-83ac-4f08-b496-46a8fab790d6",
+        "network": "eip155:5042002"
+      }
+    },
+    {
+      "listingId": "listing-5ed68a63-53b9-465d-921d-e98363dc81d7",
+      "creatorHandle": "@klaizjgu6d",
+      "status": "tipped",
+      "amountNgn": 150,
+      "amountUsdc": 0.096774,
+      "score": 105,
+      "reason": "Tipped: ai matched policy, score 105, and x402 settled with proof 3e1f85cc-bb6d-49c8-a79a-bd8daca43b0a.",
+      "scoring": {
+        "categoryMatch": true,
+        "creatorReputation": 25,
+        "suggestedTipAffordable": true,
+        "contentQuality": "high-signal",
+        "budgetRemainingBeforeNgn": 1600,
+        "gatewayRemainingBeforeUsdc": 0.377098
+      },
+      "proof": {
+        "paymentReceipt": "3e1f85cc-bb6d-49c8-a79a-bd8daca43b0a",
+        "receiptUrl": "https://gateway-api-testnet.circle.com/v1/transfers/3e1f85cc-bb6d-49c8-a79a-bd8daca43b0a",
+        "network": "eip155:5042002"
+      }
+    },
+    {
+      "listingId": "listing-0ede48e2-d2ea-4ebb-bb01-f6cafbed4222",
+      "creatorHandle": "@naijaaibuilder",
+      "status": "skipped",
+      "amountNgn": 150,
+      "amountUsdc": 0.096774,
+      "score": 105,
+      "reason": "Skipped: target of 3 settled creator tips is already complete.",
+      "scoring": {
+        "categoryMatch": true,
+        "creatorReputation": 25,
+        "suggestedTipAffordable": true,
+        "contentQuality": "high-signal",
+        "budgetRemainingBeforeNgn": 1450,
+        "gatewayRemainingBeforeUsdc": 0.280324
+      }
+    },
+    {
+      "listingId": "listing-f58f223d-ccd0-4369-8d2d-8a5d5bddc433",
+      "creatorHandle": "@naijaaibuilder",
+      "status": "skipped",
+      "amountNgn": 150,
+      "amountUsdc": 0.096774,
+      "score": 105,
+      "reason": "Skipped: target of 3 settled creator tips is already complete.",
+      "scoring": {
+        "categoryMatch": true,
+        "creatorReputation": 25,
+        "suggestedTipAffordable": true,
+        "contentQuality": "high-signal",
+        "budgetRemainingBeforeNgn": 1450,
+        "gatewayRemainingBeforeUsdc": 0.280324
+      }
+    },
+    {
+      "listingId": "listing-75d82f3b-dbe0-4be8-a9d9-b708d1334d4d",
+      "creatorHandle": "@phase2demo",
+      "status": "skipped",
+      "amountNgn": 150,
+      "amountUsdc": 0.096774,
+      "score": 105,
+      "reason": "Skipped: target of 3 settled creator tips is already complete.",
+      "scoring": {
+        "categoryMatch": true,
+        "creatorReputation": 25,
+        "suggestedTipAffordable": true,
+        "contentQuality": "high-signal",
+        "budgetRemainingBeforeNgn": 1450,
+        "gatewayRemainingBeforeUsdc": 0.280324
+      }
+    },
+    {
+      "listingId": "listing-arc-ai",
+      "creatorHandle": "@adaobiokoro",
+      "status": "skipped",
+      "amountNgn": 150,
+      "amountUsdc": 0.096774,
+      "score": 105,
+      "reason": "Skipped: target of 3 settled creator tips is already complete.",
+      "scoring": {
+        "categoryMatch": true,
+        "creatorReputation": 25,
+        "suggestedTipAffordable": true,
+        "contentQuality": "high-signal",
+        "budgetRemainingBeforeNgn": 1450,
+        "gatewayRemainingBeforeUsdc": 0.280324
+      }
+    },
+    {
+      "listingId": "listing-x402",
+      "creatorHandle": "@Chuksdakingz",
+      "status": "skipped",
+      "amountNgn": 250,
+      "amountUsdc": 0.16129,
+      "score": 105,
+      "reason": "Skipped: target of 3 settled creator tips is already complete.",
+      "scoring": {
+        "categoryMatch": true,
+        "creatorReputation": 25,
+        "suggestedTipAffordable": true,
+        "contentQuality": "high-signal",
+        "budgetRemainingBeforeNgn": 1450,
+        "gatewayRemainingBeforeUsdc": 0.280324
+      }
+    },
+    {
+      "listingId": "listing-cbf96c90-d52d-40f4-8ecb-f4ffa6289314",
+      "creatorHandle": "@p2dbg112557",
+      "status": "skipped",
+      "amountNgn": 250,
+      "amountUsdc": 0.16129,
+      "score": 92,
+      "reason": "Skipped: target of 3 settled creator tips is already complete.",
+      "scoring": {
+        "categoryMatch": true,
+        "creatorReputation": 25,
+        "suggestedTipAffordable": true,
+        "contentQuality": "standard",
+        "budgetRemainingBeforeNgn": 1450,
+        "gatewayRemainingBeforeUsdc": 0.280324
+      }
+    }
+  ]
+}

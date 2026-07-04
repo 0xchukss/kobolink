@@ -1,0 +1,145 @@
+{
+  "ok": false,
+  "generatedAt": "2026-07-03T09:09:01.599Z",
+  "remainingCount": 5,
+  "actions": [
+    {
+      "id": "privy-auth",
+      "status": "todo",
+      "title": "Configure server-side Privy auth",
+      "why": "Real app mutations must be verified server-side, not only gated by client sign-in.",
+      "env": [
+        "NEXT_PUBLIC_PRIVY_APP_ID",
+        "PRIVY_APP_SECRET"
+      ],
+      "commands": [
+        "npm run proof:real-mode"
+      ]
+    },
+    {
+      "id": "real-listings",
+      "status": "todo",
+      "title": "Create a creator-attached X listing with live URL proof",
+      "why": "Tips and agent runs need a real creator listing target with a creator-supplied X post link, pasted content, and live URL proof.",
+      "env": [
+        "KOBOLINK_CREATOR_X_HANDLE",
+        "KOBOLINK_CREATOR_DISPLAY_NAME",
+        "KOBOLINK_CREATOR_WALLET_ADDRESS",
+        "KOBOLINK_CREATOR_CATEGORY",
+        "KOBOLINK_LISTING_TITLE",
+        "KOBOLINK_LISTING_X_URL",
+        "KOBOLINK_LISTING_POST_CONTENT",
+        "KOBOLINK_LISTING_MEDIA_URLS",
+        "KOBOLINK_LISTING_TIP_NGN"
+      ],
+      "commands": [
+        "npm run proof:create-listing",
+        "npm run proof:listings"
+      ]
+    },
+    {
+      "id": "no-seed-feed",
+      "title": "No shipped seed feed or X posting routes",
+      "status": "done",
+      "why": "No source, compiled seed marketplace feed, demo workflow route, X posting/OAuth routes, or X OAuth env assignments are present.",
+      "env": [],
+      "commands": []
+    },
+    {
+      "id": "flutterwave-config",
+      "title": "Flutterwave sandbox API configured",
+      "status": "done",
+      "why": "Flutterwave sandbox keys are configured.",
+      "env": [],
+      "commands": []
+    },
+    {
+      "id": "flutterwave-deposit",
+      "status": "todo",
+      "title": "Verify a Flutterwave sandbox deposit",
+      "why": "Naira balance is credited only after a Flutterwave checkout receipt and transaction verification match the same tx_ref.",
+      "env": [
+        "KOBOLINK_BRIDGE_DEPOSIT_NGN",
+        "KOBOLINK_BRIDGE_CUSTOMER_EMAIL",
+        "KOBOLINK_BRIDGE_CUSTOMER_NAME",
+        "KOBOLINK_BRIDGE_DEPOSIT_RECEIPT_ID",
+        "KOBOLINK_BRIDGE_TRANSACTION_ID"
+      ],
+      "commands": [
+        "npm run proof:bridge-checkout",
+        "npm run proof:bridge-verify"
+      ]
+    },
+    {
+      "id": "flutterwave-payout",
+      "status": "todo",
+      "title": "Get an accepted Flutterwave sandbox payout",
+      "why": "The verifier requires Flutterwave to accept the payout request and settled Arc/Circle/x402 creator earnings to cover accepted payouts for that creator; sandbox API errors do not count.",
+      "env": [
+        "KOBOLINK_PAYOUT_CREATOR_HANDLE",
+        "KOBOLINK_PAYOUT_NGN",
+        "KOBOLINK_PAYOUT_BANK_CODE",
+        "KOBOLINK_PAYOUT_ACCOUNT_NUMBER"
+      ],
+      "commands": [
+        "Settle a creator tip before payout if the creator has no earnings",
+        "Enable Flutterwave sandbox payout/IP whitelisting",
+        "npm run proof:bridge-payout"
+      ]
+    },
+    {
+      "id": "arc-balance",
+      "title": "Arc Testnet wallet balance proof",
+      "status": "done",
+      "why": "17.715270056818493 native USDC on Arc chain 5042002 for 0x6BAeB217DBF5B53c9A1Ba88750fFF6c0cA7931E3 (live Arc RPC).",
+      "env": [],
+      "commands": []
+    },
+    {
+      "id": "gateway-balance",
+      "title": "Circle Gateway spendable balance",
+      "status": "done",
+      "why": "1.290324 USDC available in Gateway (live Circle Gateway).",
+      "env": [],
+      "commands": []
+    },
+    {
+      "id": "fan-budget-backed",
+      "title": "Fan budget backed by Circle Gateway",
+      "status": "done",
+      "why": "Budget 1.290323 USDC is covered by 1.290324 USDC in Gateway.",
+      "env": [],
+      "commands": []
+    },
+    {
+      "id": "x402-proof",
+      "title": "x402/Circle settlement proof",
+      "status": "done",
+      "why": "Payment receipt 28b5beb4-692d-4abe-98b9-5b7754ce7a8d settled on eip155:5042002 through Circle Gateway.",
+      "env": [],
+      "commands": []
+    },
+    {
+      "id": "settled-tip-log",
+      "status": "todo",
+      "title": "Settle a tip for a creator-attached listing",
+      "why": "Creator balances only count settled x402/Circle/Arc proof tied to the current creator feed and written to proofs/real-tip.json.",
+      "env": [
+        "KOBOLINK_TIP_LISTING_ID"
+      ],
+      "commands": [
+        "npm run proof:listings",
+        "npm run proof:tip-listing",
+        "npm run proof:tip-status"
+      ]
+    },
+    {
+      "id": "circle-env",
+      "title": "Circle/x402 wallet env configured",
+      "status": "done",
+      "why": "Fan signer and creator address are configured.",
+      "env": [],
+      "commands": []
+    }
+  ]
+}

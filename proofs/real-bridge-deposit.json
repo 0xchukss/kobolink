@@ -1,0 +1,134 @@
+{
+  "project": "KoboLink",
+  "phase": "real-flutterwave-deposit-verification",
+  "recordedAt": "2026-07-02T17:49:41.196Z",
+  "recoveredFromStoredSandboxReceipt": true,
+  "success": true,
+  "rails": {
+    "nairaBridge": "Flutterwave sandbox",
+    "tipSettlement": "Arc/Circle/x402 USDC"
+  },
+  "receipt": {
+    "id": "fw-deposit-2dbc772f-a56c-4365-afa1-d8c9da3acd7f",
+    "type": "deposit",
+    "provider": "flutterwave-sandbox",
+    "providerMode": "real_flutterwave_sandbox",
+    "status": "credit_applied",
+    "amountNgn": 2000,
+    "usdcEquivalent": 1.290323,
+    "txRef": "kobolink-deposit-1782759319395-58c9bef9",
+    "creditedNgn": 2000,
+    "creditedUsdc": 1.290323,
+    "customer": {
+      "email": "fa***@kobolink.local",
+      "name": "KoboLink Fan",
+      "phoneNumber": "***0000"
+    },
+    "createdAt": "2026-06-29T18:55:19.394Z",
+    "updatedAt": "2026-06-29T19:01:08.938Z",
+    "checkoutUrl": "https://checkout-v2.dev-flutterwave.com/v3/hosted/pay/edabf5eade882a4f36bd",
+    "responseStatus": "success",
+    "responseMessage": "Transaction fetched successfully",
+    "transactionId": "10334429",
+    "verifiedAt": "2026-06-29T19:01:08.938Z"
+  },
+  "creditedBalance": {
+    "amountNgn": 2000,
+    "amountUsdc": 1.290323
+  },
+  "bridgeState": {
+    "deposits": [
+      {
+        "id": "fw-deposit-4412e36f-ea47-41c7-8816-75b728027b4f",
+        "type": "deposit",
+        "provider": "flutterwave-sandbox",
+        "providerMode": "real_flutterwave_sandbox",
+        "status": "checkout_created",
+        "amountNgn": 2000,
+        "usdcEquivalent": 1.290323,
+        "txRef": "kobolink-deposit-1782869689285-e4ecdbe9",
+        "creditedNgn": 0,
+        "creditedUsdc": 0,
+        "customer": {
+          "email": "fa***@kobolink.local",
+          "name": "KoboLink Fan",
+          "phoneNumber": "***0000"
+        },
+        "createdAt": "2026-07-01T01:34:49.284Z",
+        "updatedAt": "2026-07-01T01:34:49.284Z",
+        "checkoutUrl": "https://checkout-v2.dev-flutterwave.com/v3/hosted/pay/9965bc67061c4fa67cb9",
+        "responseStatus": "success",
+        "responseMessage": "Hosted Link"
+      },
+      {
+        "id": "fw-deposit-2dbc772f-a56c-4365-afa1-d8c9da3acd7f",
+        "type": "deposit",
+        "provider": "flutterwave-sandbox",
+        "providerMode": "real_flutterwave_sandbox",
+        "status": "credit_applied",
+        "amountNgn": 2000,
+        "usdcEquivalent": 1.290323,
+        "txRef": "kobolink-deposit-1782759319395-58c9bef9",
+        "creditedNgn": 2000,
+        "creditedUsdc": 1.290323,
+        "customer": {
+          "email": "fa***@kobolink.local",
+          "name": "KoboLink Fan",
+          "phoneNumber": "***0000"
+        },
+        "createdAt": "2026-06-29T18:55:19.394Z",
+        "updatedAt": "2026-06-29T19:01:08.938Z",
+        "checkoutUrl": "https://checkout-v2.dev-flutterwave.com/v3/hosted/pay/edabf5eade882a4f36bd",
+        "responseStatus": "success",
+        "responseMessage": "Transaction fetched successfully",
+        "transactionId": "10334429",
+        "verifiedAt": "2026-06-29T19:01:08.938Z"
+      }
+    ],
+    "withdrawals": [
+      {
+        "id": "fw-withdraw-d529a450-e3fe-4607-a2b8-be4034147039",
+        "type": "withdrawal",
+        "mode": "naira_payout",
+        "provider": "flutterwave-sandbox",
+        "providerMode": "real_flutterwave_sandbox",
+        "status": "sandbox_api_error",
+        "creatorHandle": "@adaobiokoro",
+        "amountNgn": 150,
+        "usdcEquivalent": 0.096774,
+        "reference": "kobolink-payout-1782869690773-bda949ae",
+        "bankCode": "044",
+        "accountNumber": "****0032",
+        "createdAt": "2026-07-01T01:34:50.773Z",
+        "updatedAt": "2026-07-01T01:34:50.773Z",
+        "responseStatus": "error",
+        "responseMessage": "Please enable IP Whitelisting to access this service"
+      },
+      {
+        "id": "fw-withdraw-3ad5e2cb-229c-44ad-bf08-20677fb7ebad",
+        "type": "withdrawal",
+        "mode": "naira_payout",
+        "provider": "flutterwave-sandbox",
+        "providerMode": "real_flutterwave_sandbox",
+        "status": "sandbox_api_error",
+        "creatorHandle": "@adaobiokoro",
+        "amountNgn": 150,
+        "usdcEquivalent": 0.096774,
+        "reference": "kobolink-payout-1782759320508-a4d4a535",
+        "bankCode": "044",
+        "accountNumber": "****0032",
+        "createdAt": "2026-06-29T18:55:20.508Z",
+        "updatedAt": "2026-06-29T18:55:20.508Z",
+        "responseStatus": "error",
+        "responseMessage": "Please enable IP Whitelisting to access this service"
+      }
+    ],
+    "verifiedNairaBalance": 2000,
+    "verifiedUsdcEquivalent": 1.290323,
+    "rails": {
+      "nairaBridge": "Flutterwave sandbox",
+      "tipSettlement": "Arc/Circle/x402 USDC"
+    },
+    "updatedAt": "2026-07-02T17:47:52.131Z"
+  }
+}

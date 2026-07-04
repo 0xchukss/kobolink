@@ -1,0 +1,148 @@
+{
+  "project": "KoboLink",
+  "phase": "day-1-testnet-payment-proof",
+  "createdAt": "2026-06-28T23:33:23.866Z",
+  "updatedAt": "2026-07-01T01:35:08.102Z",
+  "arcBalance": {
+    "recordedAt": "2026-07-01T01:35:08.102Z",
+    "ok": true,
+    "network": "Arc Testnet",
+    "chainId": 5042002,
+    "address": "0x6BAeB217DBF5B53c9A1Ba88750fFF6c0cA7931E3",
+    "addressUrl": "https://testnet.arcscan.app/address/0x6BAeB217DBF5B53c9A1Ba88750fFF6c0cA7931E3",
+    "nativeUsdc": "18.995901525",
+    "nativeUsdcAtomic": "18995901525000000000",
+    "gateway": {
+      "walletUsdc": "18.995901",
+      "gatewayAvailableUsdc": "0.01226",
+      "gatewayTotalUsdc": "0.01226"
+    }
+  },
+  "wallets": {
+    "recordedAt": "2026-06-29T00:52:11.212Z",
+    "note": "Public addresses only. Private keys are stored in ignored .env.local, not in this proof file.",
+    "addresses": [
+      {
+        "role": "fan",
+        "address": "0x6BAeB217DBF5B53c9A1Ba88750fFF6c0cA7931E3"
+      },
+      {
+        "role": "agent",
+        "address": "0x940BC8e06210D248C5d834E9533633C36A62f916"
+      },
+      {
+        "role": "creator",
+        "address": "0x68e7DB2E572e0e58bea085b28689b9948DF70aAD"
+      }
+    ],
+    "x402PayToAddress": "0x68e7DB2E572e0e58bea085b28689b9948DF70aAD"
+  },
+  "arcTransfer": {
+    "recordedAt": "2026-06-29T01:12:40.628Z",
+    "ok": true,
+    "network": "Arc Testnet",
+    "chainId": 5042002,
+    "from": "0x6BAeB217DBF5B53c9A1Ba88750fFF6c0cA7931E3",
+    "to": "0x68e7DB2E572e0e58bea085b28689b9948DF70aAD",
+    "amountUsdc": "0.000001",
+    "amountAtomic": "1000000000000",
+    "transactionHash": "0xc8bd910ecec9ed911478132cb788955cb5a9adc301241375faaa438d22f8b802",
+    "explorerUrl": "https://testnet.arcscan.app/tx/0xc8bd910ecec9ed911478132cb788955cb5a9adc301241375faaa438d22f8b802",
+    "blockNumber": "49225002",
+    "status": "success",
+    "recipientNativeUsdc": "0.000001"
+  },
+  "x402Payment": {
+    "recordedAt": "2026-07-01T01:33:35.801Z",
+    "ok": true,
+    "endpoint": "http://127.0.0.1:64378/proof/x402",
+    "challengeStatus": 402,
+    "buyerAddress": "0x6BAeB217DBF5B53c9A1Ba88750fFF6c0cA7931E3",
+    "sellerAddress": "0x68e7DB2E572e0e58bea085b28689b9948DF70aAD",
+    "network": "eip155:5042002",
+    "chain": "arcTestnet",
+    "facilitatorUrl": "https://gateway-api-testnet.circle.com",
+    "priceUsdc": "0.01",
+    "priceAtomic": "10000",
+    "x402MaxTimeoutSeconds": 610000,
+    "requirements": {
+      "scheme": "exact",
+      "network": "eip155:5042002",
+      "asset": "0x3600000000000000000000000000000000000000",
+      "amount": "10000",
+      "payTo": "0x68e7DB2E572e0e58bea085b28689b9948DF70aAD",
+      "maxTimeoutSeconds": 610000,
+      "extra": {
+        "name": "GatewayWalletBatched",
+        "version": "1",
+        "verifyingContract": "0x0077777d7eba4688bdef3e311b846f25870a19b9"
+      }
+    },
+    "support": {
+      "supported": true,
+      "requirements": {
+        "scheme": "exact",
+        "network": "eip155:5042002",
+        "asset": "0x3600000000000000000000000000000000000000",
+        "amount": "10000",
+        "payTo": "0x68e7DB2E572e0e58bea085b28689b9948DF70aAD",
+        "maxTimeoutSeconds": 610000,
+        "extra": {
+          "name": "GatewayWalletBatched",
+          "version": "1",
+          "verifyingContract": "0x0077777d7eba4688bdef3e311b846f25870a19b9"
+        }
+      }
+    },
+    "verifyResult": {
+      "isValid": true,
+      "payer": "0x6baeb217dbf5b53c9a1ba88750fff6c0ca7931e3"
+    },
+    "settleResult": {
+      "success": true,
+      "payer": "0x6baeb217dbf5b53c9a1ba88750fff6c0ca7931e3",
+      "transaction": "28b5beb4-692d-4abe-98b9-5b7754ce7a8d",
+      "network": "eip155:5042002"
+    },
+    "payment": {
+      "amount": "10000",
+      "formattedAmount": "0.01",
+      "status": 200,
+      "transaction": "28b5beb4-692d-4abe-98b9-5b7754ce7a8d",
+      "data": {
+        "ok": true,
+        "content": "KoboLink creator tip endpoint unlocked by x402 payment on Arc Testnet.",
+        "sellerAddress": "0x68e7DB2E572e0e58bea085b28689b9948DF70aAD",
+        "payment": {
+          "verified": true,
+          "payer": "0x6baeb217dbf5b53c9a1ba88750fff6c0ca7931e3",
+          "amount": "10000",
+          "network": "eip155:5042002",
+          "transaction": "28b5beb4-692d-4abe-98b9-5b7754ce7a8d"
+        }
+      }
+    },
+    "paidRequest": {
+      "verified": true,
+      "payer": "0x6baeb217dbf5b53c9a1ba88750fff6c0ca7931e3",
+      "amount": "10000",
+      "network": "eip155:5042002",
+      "transaction": "28b5beb4-692d-4abe-98b9-5b7754ce7a8d"
+    },
+    "balances": {
+      "before": {
+        "walletUsdc": "18.995901",
+        "gatewayAvailableUsdc": "0.02226"
+      },
+      "afterDeposit": {
+        "walletUsdc": "18.995901",
+        "gatewayAvailableUsdc": "0.02226"
+      },
+      "afterPayment": {
+        "walletUsdc": "18.995901",
+        "gatewayAvailableUsdc": "0.01226"
+      }
+    },
+    "requestCount": 4
+  }
+}

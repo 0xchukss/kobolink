@@ -1,0 +1,85 @@
+{
+  "generatedAt": "2026-07-03T09:09:01.599Z",
+  "ok": false,
+  "checks": [
+    {
+      "id": "privy-auth",
+      "label": "Privy app entry and server mutation auth configured",
+      "ok": false,
+      "detail": "Missing: PRIVY_APP_SECRET"
+    },
+    {
+      "id": "real-listings",
+      "label": "Creator-attached X listings available",
+      "ok": false,
+      "detail": "No creator-attached X status listings are available. Missing input for npm run proof:create-listing: KOBOLINK_CREATOR_X_HANDLE is required for a real testnet proof"
+    },
+    {
+      "id": "no-seed-feed",
+      "label": "No shipped seed feed or X posting routes",
+      "ok": true,
+      "detail": "No source, compiled seed marketplace feed, demo workflow route, X posting/OAuth routes, or X OAuth env assignments are present."
+    },
+    {
+      "id": "flutterwave-config",
+      "label": "Flutterwave sandbox API configured",
+      "ok": true,
+      "detail": "Flutterwave sandbox keys are configured."
+    },
+    {
+      "id": "flutterwave-deposit",
+      "label": "Verified Flutterwave Naira deposit",
+      "ok": false,
+      "detail": "Run npm run proof:bridge-checkout, complete the sandbox payment, then run npm run proof:bridge-verify. Missing input for npm run proof:bridge-checkout: KOBOLINK_BRIDGE_DEPOSIT_NGN is required for a real testnet proof Missing input for npm run proof:bridge-verify: KOBOLINK_BRIDGE_TRANSACTION_ID is required for a real testnet proof"
+    },
+    {
+      "id": "flutterwave-payout",
+      "label": "Flutterwave Naira payout request accepted",
+      "ok": false,
+      "detail": "Run npm run proof:bridge-payout with explicit sandbox payout details. Missing input for npm run proof:bridge-payout: KOBOLINK_PAYOUT_BANK_CODE is required for a real testnet proof"
+    },
+    {
+      "id": "arc-balance",
+      "label": "Arc Testnet wallet balance proof",
+      "ok": true,
+      "detail": "17.715270056818493 native USDC on Arc chain 5042002 for 0x6BAeB217DBF5B53c9A1Ba88750fFF6c0cA7931E3 (live Arc RPC)."
+    },
+    {
+      "id": "gateway-balance",
+      "label": "Circle Gateway spendable balance",
+      "ok": true,
+      "detail": "1.290324 USDC available in Gateway (live Circle Gateway)."
+    },
+    {
+      "id": "fan-budget-backed",
+      "label": "Fan budget backed by Circle Gateway",
+      "ok": true,
+      "detail": "Budget 1.290323 USDC is covered by 1.290324 USDC in Gateway."
+    },
+    {
+      "id": "x402-proof",
+      "label": "x402/Circle settlement proof",
+      "ok": true,
+      "detail": "Payment receipt 28b5beb4-692d-4abe-98b9-5b7754ce7a8d settled on eip155:5042002 through Circle Gateway."
+    },
+    {
+      "id": "settled-tip-log",
+      "label": "Strict real tip proof for a creator-attached listing",
+      "ok": false,
+      "detail": "No settled payment logs match the creator-attached X feed."
+    },
+    {
+      "id": "circle-env",
+      "label": "Circle/x402 wallet env configured",
+      "ok": true,
+      "detail": "Fan signer and creator address are configured."
+    }
+  ],
+  "blockers": [
+    "Privy app entry and server mutation auth configured: Missing: PRIVY_APP_SECRET",
+    "Creator-attached X listings available: No creator-attached X status listings are available. Missing input for npm run proof:create-listing: KOBOLINK_CREATOR_X_HANDLE is required for a real testnet proof",
+    "Verified Flutterwave Naira deposit: Run npm run proof:bridge-checkout, complete the sandbox payment, then run npm run proof:bridge-verify. Missing input for npm run proof:bridge-checkout: KOBOLINK_BRIDGE_DEPOSIT_NGN is required for a real testnet proof Missing input for npm run proof:bridge-verify: KOBOLINK_BRIDGE_TRANSACTION_ID is required for a real testnet proof",
+    "Flutterwave Naira payout request accepted: Run npm run proof:bridge-payout with explicit sandbox payout details. Missing input for npm run proof:bridge-payout: KOBOLINK_PAYOUT_BANK_CODE is required for a real testnet proof",
+    "Strict real tip proof for a creator-attached listing: No settled payment logs match the creator-attached X feed."
+  ]
+}

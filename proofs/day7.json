@@ -1,0 +1,101 @@
+{
+  "project": "KoboLink",
+  "phase": "real-testnet-proof-package",
+  "generatedAt": "2026-07-02T12:58:30.140Z",
+  "success": false,
+  "summary": {
+    "creatorCount": 0,
+    "listingCount": 0,
+    "settledPaymentCount": 0,
+    "agentTipCount": 0,
+    "uniqueAgentProofCount": 0,
+    "creditedNairaBalance": 0,
+    "creditedUsdcBalance": 0,
+    "flutterwaveDepositStatus": "missing",
+    "flutterwavePayoutStatus": "missing",
+    "fanBudgetStatus": "backed",
+    "gatewayBalanceStatus": "read",
+    "gatewayBalanceSource": "live Circle Gateway"
+  },
+  "items": [
+    {
+      "id": "arc-transfer",
+      "title": "Arc Testnet wallet transfer",
+      "status": "passed",
+      "rail": "Arc Testnet",
+      "summary": "0.000001 USDC transfer settled on Arc Testnet.",
+      "proof": "0xc8bd910ecec9ed911478132cb788955cb5a9adc301241375faaa438d22f8b802",
+      "href": "https://testnet.arcscan.app/tx/0xc8bd910ecec9ed911478132cb788955cb5a9adc301241375faaa438d22f8b802",
+      "recordedAt": "2026-06-29T01:12:40.628Z",
+      "source": "proofs/day1.json"
+    },
+    {
+      "id": "x402-settlement",
+      "title": "x402 challenge and Circle settlement",
+      "status": "passed",
+      "rail": "Circle x402",
+      "summary": "Payment receipt 28b5beb4-692d-4abe-98b9-5b7754ce7a8d settled on eip155:5042002 through Circle Gateway.",
+      "proof": "28b5beb4-692d-4abe-98b9-5b7754ce7a8d",
+      "recordedAt": "2026-07-01T01:33:35.801Z",
+      "source": "proofs/day1.json"
+    },
+    {
+      "id": "latest-tip-log",
+      "title": "Latest recorded creator tip",
+      "status": "missing",
+      "rail": "Arc Testnet",
+      "summary": "No settled payment log found.",
+      "source": "data/payment-logs.jsonl"
+    },
+    {
+      "id": "fan-budget-backed",
+      "title": "Authorized fan budget",
+      "status": "passed",
+      "rail": "Fan Budget",
+      "summary": "₦2,000 / 1.290323 USDC authorized and covered by 1.290324 USDC in Circle Gateway.",
+      "proof": "budget-20260629181605359",
+      "recordedAt": "2026-06-30T11:54:37.186Z",
+      "source": "data/fan-budget.json + live Circle Gateway"
+    },
+    {
+      "id": "agent-run",
+      "title": "Autonomous agent payment run",
+      "status": "missing",
+      "rail": "Agent",
+      "summary": "0 verified creator tips, 0 unique proofs, ₦0 / 0 USDC spent.",
+      "proof": "0 unique x402 proofs",
+      "recordedAt": "2026-06-29T18:16:10.840Z",
+      "source": "proofs/day5.json + data/payment-logs.jsonl"
+    },
+    {
+      "id": "flutterwave-deposit",
+      "title": "Flutterwave sandbox Naira deposit",
+      "status": "missing",
+      "rail": "Flutterwave Sandbox",
+      "summary": "Run npm run proof:bridge-checkout, complete the sandbox payment, then run npm run proof:bridge-verify.",
+      "source": "proofs/real-bridge-deposit.json + data/flutterwave-bridge.json"
+    },
+    {
+      "id": "flutterwave-payout",
+      "title": "Flutterwave sandbox Naira payout request",
+      "status": "missing",
+      "rail": "Flutterwave Sandbox",
+      "summary": "Run npm run proof:bridge-payout with explicit sandbox payout details.",
+      "source": "proofs/real-bridge-payout.json + data/flutterwave-bridge.json"
+    },
+    {
+      "id": "creator-feed",
+      "title": "Creator-attached X feed",
+      "status": "missing",
+      "rail": "Creator Feed",
+      "summary": "0 creators and 0 creator-attached X listings are available as payment targets.",
+      "proof": "0 creators / 0 listings",
+      "recordedAt": "2026-07-02T12:58:30.140Z",
+      "source": "data/creator-listings.json"
+    }
+  ],
+  "caveats": [
+    "Flutterwave is a sandbox Naira bridge only; creator tips settle through Arc/Circle/x402 as USDC.",
+    "Flutterwave sandbox payout reached /v3/transfers but requires IP whitelisting before a successful Naira transfer."
+  ]
+}

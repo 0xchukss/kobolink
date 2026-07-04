@@ -1,0 +1,35 @@
+{
+  "project": "KoboLink",
+  "phase": "real-circle-gateway-budget-funding",
+  "recordedAt": "2026-07-02T12:55:15.148Z",
+  "success": true,
+  "budget": {
+    "source": "data/fan-budget.json",
+    "id": "budget-20260629181605359",
+    "fanAddress": "0x6BAeB217DBF5B53c9A1Ba88750fFF6c0cA7931E3",
+    "budgetNgn": 2000,
+    "budgetUsdc": 1.290323
+  },
+  "before": {
+    "fanAddress": "0x6BAeB217DBF5B53c9A1Ba88750fFF6c0cA7931E3",
+    "walletUsdc": 17.71527,
+    "gatewayAvailableUsdc": 1.290324,
+    "gatewayTotalUsdc": 1.290324,
+    "requiredBudgetUsdc": 1.290323,
+    "fullyFunded": true,
+    "checkedAt": "2026-07-02T12:55:15.147Z"
+  },
+  "deposit": {
+    "skipped": true,
+    "reason": "Gateway already covered the target fan budget."
+  },
+  "after": {
+    "fanAddress": "0x6BAeB217DBF5B53c9A1Ba88750fFF6c0cA7931E3",
+    "walletUsdc": 17.71527,
+    "gatewayAvailableUsdc": 1.290324,
+    "gatewayTotalUsdc": 1.290324,
+    "requiredBudgetUsdc": 1.290323,
+    "fullyFunded": true,
+    "checkedAt": "2026-07-02T12:55:15.147Z"
+  }
+}

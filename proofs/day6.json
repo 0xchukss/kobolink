@@ -1,0 +1,24 @@
+{
+  "project": "KoboLink",
+  "phase": "day-6-flutterwave-sandbox-naira-bridge-status",
+  "recordedAt": "2026-07-02T12:58:28.822Z",
+  "success": false,
+  "configStatus": {
+    "hasPublicKey": true,
+    "hasSecretKey": true,
+    "hasEncryptionKey": true,
+    "ready": true
+  },
+  "rails": {
+    "nairaBridge": "Flutterwave sandbox",
+    "tipSettlement": "Arc/Circle/x402 USDC"
+  },
+  "creditedBalance": {
+    "amountNgn": 0,
+    "usdcEquivalent": 0
+  },
+  "requirements": {
+    "deposit": "Run npm run proof:bridge-checkout, complete the sandbox payment, then run npm run proof:bridge-verify.",
+    "payout": "Run npm run proof:bridge-payout with explicit sandbox payout details."
+  }
+}

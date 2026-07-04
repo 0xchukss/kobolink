@@ -1,0 +1,40 @@
+{
+  "project": "KoboLink",
+  "phase": "day-4-fan-budget-agent-wallet-control",
+  "recordedAt": "2026-06-29T11:25:58.016Z",
+  "fanAddress": "0x6BAeB217DBF5B53c9A1Ba88750fFF6c0cA7931E3",
+  "budget": {
+    "amountNgn": 2000,
+    "amountUsdc": 1.290323,
+    "period": "weekly",
+    "maxTipNgn": 250,
+    "preferredCategories": ["ai", "fintech", "startups"],
+    "duplicateListingProtection": true,
+    "duplicateCreatorProtection": true
+  },
+  "actualFunds": {
+    "walletUsdc": 18.995901,
+    "gatewayAvailableUsdc": 0.635162,
+    "gatewayTotalUsdc": 0.635162,
+    "fullyFundedInGateway": false
+  },
+  "ledgerAfterAgentRun": {
+    "fundedNgn": 2000,
+    "fundedUsdc": 1.290323,
+    "reservedNgn": 550,
+    "reservedUsdc": 0.354838,
+    "spentNgn": 0,
+    "spentUsdc": 0,
+    "remainingNgn": 1450,
+    "remainingUsdc": 0.935485
+  },
+  "reservedListings": [
+    { "creatorHandle": "@p2dbg112557", "amountNgn": 250, "amountUsdc": 0.16129, "listingId": "listing-cbf96c90-d52d-40f4-8ecb-f4ffa6289314" },
+    { "creatorHandle": "@phase2demo", "amountNgn": 150, "amountUsdc": 0.096774, "listingId": "listing-75d82f3b-dbe0-4be8-a9d9-b708d1334d4d" },
+    { "creatorHandle": "@adaobiokoro", "amountNgn": 150, "amountUsdc": 0.096774, "listingId": "listing-arc-ai" }
+  ],
+  "duplicateRun": {
+    "newReservations": 0,
+    "result": "all previously paid or reserved listings were skipped"
+  }
+}
