@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+data/
+dist/
+.next/
+node_modules/
+*.log
+.codex-*.png
+tsconfig.tsbuildinfo
