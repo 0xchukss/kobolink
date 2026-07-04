@@ -1,7 +1,7 @@
 .env
 .env.*
 !.env.example
-data/
+/data/
 dist/
 .next/
 node_modules/

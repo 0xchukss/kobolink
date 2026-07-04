@@ -7,6 +7,6 @@ dist/
 .DS_Store
 npm-debug.log*
 *.log
-data/
+/data/
 .codex-*.png
 tsconfig.tsbuildinfo
