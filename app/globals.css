@@ -1147,7 +1147,7 @@ input:focus, select:focus, textarea:focus, button:focus-visible, a:focus-visible
 
 .footer-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(180px, 0.5fr));
+  grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(140px, 0.5fr));
   gap: 24px;
 }
 
@@ -4247,7 +4247,7 @@ body :where(code, pre, .route-line span, .payment-proof strong, .proof-center-ca
   width: min(1180px, 100%) !important;
   margin: 0 auto !important;
   display: grid !important;
-  grid-template-columns: minmax(0, 1.35fr) minmax(150px, 0.35fr) minmax(150px, 0.35fr) !important;
+  grid-template-columns: minmax(0, 1.1fr) minmax(130px, 0.3fr) minmax(130px, 0.3fr) minmax(130px, 0.3fr) !important;
   gap: clamp(24px, 5vw, 80px) !important;
   align-items: start;
 }
