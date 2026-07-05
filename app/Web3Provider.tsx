@@ -23,6 +23,8 @@ import { defineChain } from '@reown/appkit/networks';
 
 const arcTestnet = defineChain({
   id: 5042002,
+  chainNamespace: 'eip155',
+  caipNetworkId: 'eip155:5042002',
   name: 'Arc Testnet',
   nativeCurrency: {
     name: 'USDC',
@@ -38,7 +40,7 @@ const arcTestnet = defineChain({
   testnet: true,
 });
 
-const networks = [arcTestnet];
+const networks = [arcTestnet] as any;
 
 export const wagmiAdapter = new WagmiAdapter({
   networks,

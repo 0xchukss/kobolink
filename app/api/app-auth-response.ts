@@ -1,3 +1,4 @@
+// @ts-expect-error next/headers lacks correct NodeNext exports
 import { headers } from "next/headers";
 import { ClerkMutationAuthError } from "../../src/auth/clerk-server.js";
 
