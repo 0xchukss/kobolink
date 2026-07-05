@@ -4637,6 +4637,15 @@ body :where(code, pre, .route-line span, .payment-proof strong, .proof-center-ca
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 }
 
+.budget-grid > label {
+  background: #ffffff !important;
+  padding: 12px !important;
+  min-width: 0;
+}
+.budget-grid > label > span {
+  color: #000000 !important;
+}
+
 .gateway-funding {
   display: grid !important;
   grid-template-columns: repeat(3, minmax(260px, 1fr)) !important;
