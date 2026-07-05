@@ -2,6 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, isAbsolute, join } from "node:path";
 
 import { ensureKobolinkSchema, getSql, jsonb, postgresEnabled } from "../db/postgres.js";
+import { localStoreDir } from "../config/env.js";
 import { budgetLedger, type BudgetState, type FanBudget, type GatewayBalanceSnapshot } from "./fan-budget.js";
 
 const fallbackFileName = "fan-budget.json";
@@ -38,7 +39,7 @@ function resolveBudgetPath(path?: string): string {
     return isAbsolute(configuredPath) ? configuredPath : join(process.cwd(), configuredPath);
   }
 
-  return join(process.cwd(), "data", configuredPath ? basename(configuredPath) : fallbackFileName);
+  return join(localStoreDir, configuredPath ? basename(configuredPath) : fallbackFileName);
 }
 
 export async function readFanBudgetForOwner(ownerId: string): Promise<FanBudget | null> {
@@ -95,5 +96,5 @@ function normalizeOwnerId(ownerId: string): string {
 }
 
 function ownerBudgetPath(ownerId: string): string {
-  return join(process.cwd(), "data", "fan-budgets", ownerId.replace(/[^a-zA-Z0-9_-]/g, "_") + ".json");
+  return join(localStoreDir, "fan-budgets", ownerId.replace(/[^a-zA-Z0-9_-]/g, "_") + ".json");
 }

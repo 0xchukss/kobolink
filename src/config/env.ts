@@ -40,7 +40,9 @@ export type AppConfig = {
   };
 };
 
-export const localStoreDir = process.env.VERCEL ? "/tmp/data" : "data";
+import { join } from "node:path";
+
+export const localStoreDir = process.env.VERCEL ? "/tmp/data" : join(process.cwd(), "data");
 
 function isPlaceholder(value: string | undefined): boolean {
   if (!value) return true;

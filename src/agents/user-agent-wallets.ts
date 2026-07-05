@@ -7,6 +7,7 @@ import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { ensureKobolinkSchema, getSql, postgresEnabled } from "../db/postgres.js";
 import { decryptSecret, encryptSecret } from "../db/secret-box.js";
 import { makeGatewayClient } from "../proofs/env-wallets.js";
+import { localStoreDir } from "../config/env.js";
 
 export type UserAgentWallet = {
   userId: string;
@@ -31,7 +32,7 @@ type AgentWalletRow = {
   updated_at: string | Date;
 };
 
-const fallbackPath = join(/* turbopackIgnore: true */ process.cwd(), "data", "agent-wallets.json");
+const fallbackPath = join(localStoreDir, "agent-wallets.json");
 
 export async function ensureUserAgentWallet(userId: string): Promise<UserAgentWallet> {
   const safeUserId = normalizeUserId(userId);
