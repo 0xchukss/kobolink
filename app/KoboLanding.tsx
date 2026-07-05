@@ -10,6 +10,7 @@ type TestnetProof = {
   arcTxHash: string;
   arcExplorerUrl: string;
   x402Status: string;
+  x402Detail?: string;
   x402PriceUsdc: string;
   settlementId: string;
 };
@@ -44,6 +45,33 @@ const proofStory = [
   },
 ] as const;
 
+const faqItems = [
+  {
+    question: 'What is KoboLink?',
+    answer: 'KoboLink is a bounded autonomous tipping agent. Fans authorize a Naira budget, and the agent decides which Nigerian X creators to tip, pays them in USDC on Arc testnet, and records verifiable settlement proof.',
+  },
+  {
+    question: 'Is this real money?',
+    answer: 'No. KoboLink runs on Arc testnet USDC and the Flutterwave sandbox. No real funds move anywhere in the current demo.',
+  },
+  {
+    question: 'What fees do I pay?',
+    answer: 'None. KoboLink charges no platform fees on testnet. The only cost is Arc testnet gas, and the Naira display rate is shown transparently before you fund a budget.',
+  },
+  {
+    question: 'How does the agent decide who to tip?',
+    answer: 'The payment policy checks category fit, creator score, content quality, remaining budget, and duplicate protection before authorizing any tip. Every decision is logged and inspectable.',
+  },
+  {
+    question: 'Can the agent overspend my budget?',
+    answer: 'No. You authorize a bounded Naira budget upfront. The agent can never reserve or spend beyond that cap, and the ledger tracks funded, reserved, spent, and remaining amounts.',
+  },
+  {
+    question: 'Where can I verify payments?',
+    answer: 'Every settlement is recorded in the Proof Center with Arc explorer links, Circle Gateway settlement IDs, and a proof CLI in the GitHub repository you can run yourself.',
+  },
+] as const;
+
 const howItWorks = [
   'Sign in once through the KoboLink entry flow.',
   'Choose whether to list a post or tip your top creators.',
@@ -62,6 +90,7 @@ export function KoboLanding({ stats, proof }: KoboLandingProps) {
         <nav aria-label='KoboLink landing navigation'>
           <a className='nav-animate' href='#proof'>Proof</a>
           <a className='nav-animate' href='#how-it-works'>How it works</a>
+          <a className='nav-animate' href='#faq'>FAQ</a>
         </nav>
       </header>
 
@@ -94,8 +123,9 @@ export function KoboLanding({ stats, proof }: KoboLandingProps) {
           <strong>{proof.arcAmountUsdc} USDC</strong>
         </div>
         <div className='metric-tile'>
-          <span>x402 result</span>
+          <span>x402 settlement</span>
           <strong>{proof.x402Status}</strong>
+          {proof.x402Detail ? <small className='metric-detail'>{proof.x402Detail}</small> : null}
         </div>
         <div className='metric-tile'>
           <span>Default tip</span>
@@ -103,7 +133,7 @@ export function KoboLanding({ stats, proof }: KoboLandingProps) {
         </div>
       </section>
       {stats.lastRefreshed ? (
-        <div style={{ textAlign: 'center', marginTop: '-1rem', marginBottom: '2rem', fontSize: '0.8rem', opacity: 0.6 }}>
+        <div style={{ textAlign: 'center', marginTop: '-1rem', marginBottom: '2rem', fontSize: '0.875rem', opacity: 0.6 }}>
           Live data retrieved at {stats.lastRefreshed}
         </div>
       ) : null}
@@ -160,6 +190,45 @@ export function KoboLanding({ stats, proof }: KoboLandingProps) {
         </p>
         <div style={{ maxWidth: '1000px', margin: '0 auto', border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden', background: '#11170f' }}>
           <img src="/screenshots/creator-real-x-proof-gate.png" alt="Creator Listing Dashboard Preview" style={{ width: '100%', display: 'block' }} />
+        </div>
+      </section>
+
+      <section className='fee-band reveal-block' id='fees' aria-label='What KoboLink costs'>
+        <div className='section-copy'>
+          <h2>What it costs.</h2>
+          <p>No hidden fees. The conversion rate is shown before you fund anything, and the testnet demo charges nothing.</p>
+        </div>
+        <div className='fee-grid'>
+          <article className='fee-tile'>
+            <span>Naira display rate</span>
+            <strong>{stats.exchangeRate}</strong>
+            <small>per 1 USDC, shown before every budget authorization</small>
+          </article>
+          <article className='fee-tile'>
+            <span>Default tip</span>
+            <strong>{stats.defaultTip}</strong>
+            <small>{stats.defaultTipUsdc} equivalent on Arc</small>
+          </article>
+          <article className='fee-tile'>
+            <span>Platform fee</span>
+            <strong>None</strong>
+            <small>Testnet demo. Only Arc testnet gas applies; no real funds move.</small>
+          </article>
+        </div>
+      </section>
+
+      <section className='faq-section reveal-block' id='faq' aria-label='Frequently asked questions'>
+        <div className='section-copy'>
+          <h2>Frequently asked questions.</h2>
+          <p>Everything fans and creators ask before running their first bounded tipping agent.</p>
+        </div>
+        <div className='faq-list'>
+          {faqItems.map((item) => (
+            <details className='faq-item' key={item.question}>
+              <summary>{item.question}</summary>
+              <p>{item.answer}</p>
+            </details>
+          ))}
         </div>
       </section>
 

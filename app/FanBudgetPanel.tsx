@@ -293,7 +293,18 @@ export function FanBudgetPanel({ categories, ngnPerUsdc, showSetup = true, showA
           <div className="gateway-funding" aria-label="USDC budget funding source">
             <div>
               <span>Account agent wallet</span>
-              <strong>{wallet ? shortAddress(wallet.fanAddress) : "Provisioning"}</strong>
+              <strong>
+                {wallet ? shortAddress(wallet.fanAddress) : (
+                  <span className="provisioning-status" title="Your per-account agent wallet is being created on Arc testnet. This takes a few seconds. Refresh the balance if it persists.">
+                    Provisioning
+                    <span aria-hidden="true" className="info-hint">?</span>
+                    <span className="sr-only">Your per-account agent wallet is being created on Arc testnet. This takes a few seconds. Refresh the balance if it persists.</span>
+                  </span>
+                )}
+              </strong>
+              {!wallet ? (
+                <small>Your agent wallet is being created on Arc testnet. This usually takes a few seconds. Use Refresh Balance if it persists.</small>
+              ) : null}
               <small>Send Arc testnet USDC to this per-account agent wallet, then deposit it to Circle Gateway for autonomous spending.</small>
             </div>
             <div>
@@ -313,7 +324,20 @@ export function FanBudgetPanel({ categories, ngnPerUsdc, showSetup = true, showA
                 <span>Deposit amount, USDC</span>
                 <input inputMode="decimal" min="0" placeholder={gatewayShortfallUsdc > 0 ? gatewayShortfallUsdc.toFixed(6) : "0.100000"} step="0.000001" type="number" value={depositUsdc} onChange={(event) => setDepositUsdc(event.target.value)} />
               </label>
-              <button className="secondary-action wallet-connect-action" disabled={!canDepositGateway} onClick={() => void depositToGateway()} type="button">Deposit to Gateway</button>
+              <button
+                className="secondary-action wallet-connect-action"
+                disabled={!canDepositGateway}
+                onClick={() => void depositToGateway()}
+                title={canDepositGateway ? undefined : "Enter a USDC deposit amount above to enable this button."}
+                type="button"
+              >
+                Deposit to Gateway
+              </button>
+              {!canDepositGateway ? (
+                <small className="deposit-disabled-hint">
+                  {status.kind === "loading" ? "Waiting for the current operation to finish." : "Enter a deposit amount above to unlock this button."}
+                </small>
+              ) : null}
             </div>
             <div>
               <span>Agent authority</span>
