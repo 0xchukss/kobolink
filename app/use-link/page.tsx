@@ -1,7 +1,6 @@
 'use client';
 
-import { SignInButton, SignOutButton, useAuth } from '@clerk/nextjs';
-import { clerkConfigured } from '../ClerkAppProvider.js';
+import { useAccount } from 'wagmi';
 import { SiteFooter } from '../SiteFooter.js';
 
 const workflows = [
@@ -20,8 +19,6 @@ const workflows = [
 ] as const;
 
 export default function UseLinkPage() {
-  const configured = clerkConfigured();
-
   return (
     <main className='signin-shell' id='main-content'>
       <header className='landing-nav workflow-nav'>
@@ -36,50 +33,31 @@ export default function UseLinkPage() {
 
       <section className='signin-hero'>
         <p className='hero-kicker'>Use KoboLink</p>
-        <h1>Sign in to KoboLink.</h1>
+        <h1>Connect your wallet.</h1>
       </section>
 
-      {configured ? <ClerkSignInPanel /> : <MissingClerkPanel />}
+      <WalletSignInPanel />
 
       <SiteFooter />
     </main>
   );
 }
 
-function MissingClerkPanel() {
-  return (
-    <section className='signin-panel' aria-label='Clerk configuration required'>
-      <div>
-        <span>Real auth required</span>
-        <h2>Clerk is not configured.</h2>
-        <p>Set NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY before using KoboLink. The app will not simulate sign-in.</p>
-      </div>
-      <button className='primary-action signin-button' disabled type='button'>Configure Clerk</button>
-    </section>
-  );
-}
-
-function ClerkSignInPanel() {
-  const { isLoaded, isSignedIn } = useAuth();
+function WalletSignInPanel() {
+  const { isConnected } = useAccount();
 
   return (
     <>
-      <section className='signin-panel' aria-label='KoboLink sign in'>
+      <section className='signin-panel' aria-label='KoboLink connect wallet'>
         <div>
-          <h2>{isSignedIn ? 'Welcome to KoboLink.' : 'Sign in with Clerk.'}</h2>
+          <h2>{isConnected ? 'Welcome to KoboLink.' : 'Connect your wallet to get started.'}</h2>
         </div>
-        {isSignedIn ? (
-          <SignOutButton>
-            <button className='secondary-action signin-button' type='button'>Sign out</button>
-          </SignOutButton>
-        ) : (
-          <SignInButton mode='modal'>
-            <button className='primary-action signin-button' disabled={!isLoaded} type='button'>{isLoaded ? 'Sign in with Clerk' : 'Loading Clerk'}</button>
-          </SignInButton>
-        )}
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+          <appkit-button />
+        </div>
       </section>
 
-      {isSignedIn ? (
+      {isConnected ? (
         <section className='workflow-choice-grid' aria-label='Choose KoboLink workflow'>
           {workflows.map((workflow) => (
             <a className={workflow.className} href={workflow.href} key={workflow.title}>

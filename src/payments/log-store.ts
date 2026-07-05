@@ -2,9 +2,10 @@ import { mkdir, appendFile, readFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
 import { ensureKobolinkSchema, getSql, jsonb, postgresEnabled } from "../db/postgres.js";
+import { localStoreDir } from "../config/env.js";
 import { balancesFromLogs, hasSettlementProof, type CreatorBalance, type FeedItem, type PaymentLog } from "./tips.js";
 
-const fallbackPath = "data/payment-logs.jsonl";
+const fallbackPath = localStoreDir + "/payment-logs.jsonl";
 
 export type PaymentState = {
   logs: PaymentLog[];

@@ -7,7 +7,7 @@ import { readProofCenterSnapshot } from '../../src/proofs/proof-center.js';
 import { formatNaira, formatUsdc } from '../../src/utils/currency.js';
 import { CreatorListingApp } from '../CreatorListingApp.js';
 import { ProofCenterPanel } from '../ProofCenterPanel.js';
-import { RealAppAuthGate } from '../RealAppAuthGate.js';
+import { AppApiAuthProvider } from '../AppApiAuthContext.js';
 import { SiteFooter } from '../SiteFooter.js';
 
 export const dynamic = 'force-dynamic';
@@ -76,7 +76,7 @@ export default async function WorkflowsPage({ searchParams }: WorkflowsPageProps
       </section>
 
       <section className='workflow-app-shell'>
-        <RealAppAuthGate>
+        <AppApiAuthProvider>
           <CreatorListingApp
             mode={mode}
             initialItems={items}
@@ -89,7 +89,7 @@ export default async function WorkflowsPage({ searchParams }: WorkflowsPageProps
               tipPresetsNgn: TIP_PRESETS_NGN,
             }}
           />
-        </RealAppAuthGate>
+        </AppApiAuthProvider>
       </section>
 
       <ProofCenterPanel snapshot={proofCenter} />

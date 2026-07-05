@@ -1,15 +1,21 @@
 // @ts-expect-error next/headers lacks correct NodeNext exports
 import { headers } from "next/headers";
-import { ClerkMutationAuthError } from "../../src/auth/clerk-server.js";
+
+export class AppAuthError extends Error {
+  constructor(message: string, public readonly status: number) {
+    super(message);
+    this.name = "AppAuthError";
+  }
+}
 
 export async function requireAppMutationAuth() {
   const headersList = await headers();
   const walletAddress = headersList.get("x-wallet-address");
-  if (!walletAddress) throw new ClerkMutationAuthError("Wallet connection required", 401);
+  if (!walletAddress) throw new AppAuthError("Wallet connection required", 401);
   return { userId: walletAddress };
 }
 
 export function appAuthResponse(error: unknown): Response | null {
-  if (!(error instanceof ClerkMutationAuthError)) return null;
+  if (!(error instanceof AppAuthError)) return null;
   return Response.json({ error: error.message }, { status: error.status });
 }

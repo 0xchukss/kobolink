@@ -1,6 +1,5 @@
 import { access, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 
-import { clerkServerConfigStatus } from "../auth/clerk-server.js";
 import { config } from "../config/env.js";
 import { readFanBudget } from "../budgets/budget-store.js";
 import { readFanGatewayBalance } from "../budgets/gateway-balance.js";
@@ -393,7 +392,6 @@ export async function buildRealModeReadiness(now = new Date().toISOString(), opt
   ]);
 
   const noSeedFeed = await noSeedMarketplaceEvidence();
-  const clerk = clerkServerConfigStatus();
   const circle = envReady(["KOBOLINK_FAN_PRIVATE_KEY", "KOBOLINK_CREATOR_ADDRESS"]);
   const flutterwave = getFlutterwaveConfigStatus();
   const settledLogs = paymentState.logs.filter(hasSettlementProof);
@@ -423,12 +421,6 @@ export async function buildRealModeReadiness(now = new Date().toISOString(), opt
   const bridgePayoutInput = commandInputStatus("npm run proof:bridge-payout", () => parseRealBridgePayoutEnv());
 
   const checks: RealModeCheck[] = [
-    {
-      id: "clerk-auth",
-      label: "Clerk app entry and server mutation auth configured",
-      ok: clerk.ok,
-      detail: clerk.ok ? "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY and CLERK_SECRET_KEY are configured." : "Missing: " + clerk.missing.join(", "),
-    },
     {
       id: "real-listings",
       label: "Creator-attached X listings available",

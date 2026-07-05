@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
-import { config } from "../config/env.js";
+import { config, localStoreDir } from "../config/env.js";
 import { ensureKobolinkSchema, getSql, jsonb, postgresEnabled } from "../db/postgres.js";
 import type { XUrlLiveProof } from "./x-url-proof.js";
 import { ngnToKobo } from "../utils/currency.js";
@@ -52,7 +52,7 @@ export type PublicCreatorFeedItem = PublicFeedItem & {
   x402PaymentPath: string;
 };
 
-const fallbackStorePath = "data/creator-listings.json";
+const fallbackStorePath = localStoreDir + "/creator-listings.json";
 export async function readCreatorListingRecords(path?: string): Promise<CreatorListingRecord[]> {
   if (!path && postgresEnabled()) return readPostgresRecords();
   return readLocalRecords(resolveStorePath(path));

@@ -4,9 +4,10 @@ import { dirname, join } from "node:path";
 import { getFlutterwaveConfigStatus } from "./config.js";
 import { isCreditedFlutterwaveDeposit, type BridgeWithdrawalReceipt, type FlutterwaveBridgeSnapshot, type FlutterwaveDepositReceipt } from "./bridge.js";
 import { ensureKobolinkSchema, getSql, jsonb, postgresEnabled } from "../db/postgres.js";
+import { localStoreDir } from "../config/env.js";
 import { findStrictVerifiedFlutterwaveDeposit, type StrictBridgeCheckoutProof, type StrictBridgeDepositProof } from "../proofs/bridge-proof-evidence.js";
 
-const fallbackPath = "data/flutterwave-bridge.json";
+const fallbackPath = localStoreDir + "/flutterwave-bridge.json";
 
 type BridgeFileState = {
   deposits: FlutterwaveDepositReceipt[];

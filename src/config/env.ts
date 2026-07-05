@@ -40,6 +40,8 @@ export type AppConfig = {
   };
 };
 
+export const localStoreDir = process.env.VERCEL ? "/tmp/data" : "data";
+
 function isPlaceholder(value: string | undefined): boolean {
   if (!value) return true;
   const normalized = value.trim().toLowerCase();

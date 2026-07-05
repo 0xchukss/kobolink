@@ -1,6 +1,4 @@
 import './globals.css';
-import { ClerkAppProvider } from './ClerkAppProvider.js';
-
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -29,7 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <a href="#main-content" className="skip-link">Skip to main content</a>
         <Web3Provider>
-          <ClerkAppProvider>{children}</ClerkAppProvider>
+          {children}
         </Web3Provider>
       </body>
     </html>
