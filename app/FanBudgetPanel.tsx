@@ -103,6 +103,21 @@ export function FanBudgetPanel({ categories, ngnPerUsdc, showSetup = true, showA
     };
   }, [authFetch, isConnected]);
 
+  async function refreshBalance() {
+    if (!isConnected) return;
+    setStatus({ kind: "loading", message: "Refreshing Gateway balance..." });
+    try {
+      const response = await authFetch("/api/fan-budget", { cache: "no-store" });
+      const payload = await response.json() as BudgetState & { error?: string };
+      if (!response.ok) throw new Error(payload.error ?? "Could not refresh balance");
+      setState(payload);
+      setStatus({ kind: "success", message: "Balance updated" });
+      setTimeout(() => setStatus({ kind: "idle", message: "Ready" }), 2000);
+    } catch (error) {
+      setStatus({ kind: "error", message: error instanceof Error ? error.message : "Could not refresh balance" });
+    }
+  }
+
   async function authorizeBudget() {
     if (!isConnected) {
       setPendingAction("authorize");
@@ -191,7 +206,32 @@ export function FanBudgetPanel({ categories, ngnPerUsdc, showSetup = true, showA
       if (!response.ok || (!payload.wallet && !payload.after)) throw new Error(payload.error ?? "Could not deposit to Gateway");
 
       setState((current) => ({ ...current, wallet: payload.wallet ?? payload.after ?? current.wallet }));
-      setStatus({ kind: "success", message: "Deposited " + formatUsdc(amountUsdc) });
+      setStatus({ kind: "success", message: "Deposit submitted. Waiting for indexing..." });
+
+      // Poll every 4 seconds, up to 10 times to automatically update once Circle Gateway credits the deposit
+      let attempts = 0;
+      const interval = setInterval(async () => {
+        attempts++;
+        try {
+          const res = await authFetch("/api/fan-budget", { cache: "no-store" });
+          const data = await res.json() as BudgetState;
+          if (res.ok && data.wallet) {
+            setState((current) => ({ ...current, wallet: data.wallet, usdcTokenAddress: data.usdcTokenAddress ?? current.usdcTokenAddress }));
+            if (data.wallet.gatewayAvailableUsdc > (wallet?.gatewayAvailableUsdc ?? 0)) {
+              setStatus({ kind: "success", message: "Deposit credited to Gateway!" });
+              clearInterval(interval);
+              setTimeout(() => setStatus({ kind: "idle", message: "Ready" }), 3000);
+              return;
+            }
+          }
+        } catch (e) {
+          // ignore polling errors
+        }
+        if (attempts >= 10) {
+          clearInterval(interval);
+        }
+      }, 4000);
+
     } catch (error) {
       setStatus({ kind: "error", message: error instanceof Error ? error.message : "Could not deposit to Gateway" });
     }
@@ -257,7 +297,16 @@ export function FanBudgetPanel({ categories, ngnPerUsdc, showSetup = true, showA
               <small>Send Arc testnet USDC to this per-account agent wallet, then deposit it to Circle Gateway for autonomous spending.</small>
             </div>
             <div>
-              <span>Gateway spending balance</span>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span>Gateway spending balance</span>
+                <button 
+                  onClick={() => void refreshBalance()} 
+                  style={{ background: "none", border: "none", cursor: "pointer", fontSize: "0.8rem", textDecoration: "underline", color: "inherit", opacity: 0.7 }}
+                  type="button"
+                >
+                  Refresh Balance
+                </button>
+              </div>
               <strong>{wallet ? formatUsdc(wallet.gatewayAvailableUsdc) + " spendable" : "Gateway balance pending"}</strong>
               <small>{wallet ? "Agent wallet balance: " + formatUsdc(wallet.walletUsdc) + ". " : ""}{gatewayShortfallUsdc > 0 ? formatUsdc(gatewayShortfallUsdc) + " more needed for this budget." : "Current Gateway balance covers this budget."}</small>
               <label className="gateway-deposit-input">

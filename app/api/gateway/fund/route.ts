@@ -19,7 +19,16 @@ export async function POST(request: Request) {
 
     const client = makeUserAgentGatewayClient(agentWallet);
     const before = await readGatewayBalanceForPrivateKey(agentWallet.privateKey, requiredBudgetUsdc);
-    const receipt = await client.deposit(amountUsdc.toFixed(6));
+
+    // Leave a small buffer (0.01 USDC) for transaction gas since USDC is the native gas token on Arc Testnet
+    const maxDepositUsdc = Math.max(0, before.walletUsdc - 0.01);
+    const actualDepositUsdc = Math.min(amountUsdc, maxDepositUsdc);
+
+    if (actualDepositUsdc <= 0) {
+      throw new Error(`Insufficient Agent Wallet balance to cover gas and deposit. Wallet has ${before.walletUsdc} USDC.`);
+    }
+
+    const receipt = await client.deposit(actualDepositUsdc.toFixed(6));
     const after = await readGatewayBalanceForPrivateKey(agentWallet.privateKey, requiredBudgetUsdc);
 
     return jsonResponse({
