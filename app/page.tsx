@@ -15,6 +15,7 @@ type LandingProof = {
   arcTxHash: string;
   arcExplorerUrl: string;
   x402Status: string;
+  x402Detail?: string;
   x402PriceUsdc: string;
   settlementId: string;
 };
@@ -64,7 +65,10 @@ async function readLandingProof(): Promise<LandingProof> {
     arcAmountUsdc: transferOk ? transfer?.amountUsdc ?? '0' : 'missing',
     arcTxHash: transferOk ? transfer?.transactionHash ?? 'missing' : 'missing',
     arcExplorerUrl: transferOk ? transfer?.explorerUrl ?? config.arc.explorerUrl : config.arc.explorerUrl,
-    x402Status: x402Evidence.ok ? String(day1?.x402Payment?.challengeStatus) + ' then ' + String(day1?.x402Payment?.payment?.status) : 'missing',
+    x402Status: x402Evidence.ok ? 'Challenged, then settled' : 'missing',
+    x402Detail: x402Evidence.ok
+      ? 'HTTP ' + String(day1?.x402Payment?.challengeStatus) + ' \u2192 ' + String(day1?.x402Payment?.payment?.status)
+      : undefined,
     x402PriceUsdc: x402Evidence.ok ? day1?.x402Payment?.priceUsdc ?? 'missing' : 'missing',
     settlementId: x402Evidence.transaction ?? 'missing',
   };

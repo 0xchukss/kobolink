@@ -5,10 +5,24 @@ type ProofCenterPanelProps = {
 };
 
 const statusLabels: Record<string, string> = {
-  passed: "Passed",
+  passed: "Verified",
   warning: "Warning",
-  missing: "Missing",
+  missing: "Coming next",
 };
+
+function formatUtc(iso: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return iso;
+  return date.toLocaleString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "UTC",
+    timeZoneName: "short",
+  });
+}
 
 export function ProofCenterPanel({ snapshot }: ProofCenterPanelProps) {
   return (
@@ -17,6 +31,7 @@ export function ProofCenterPanel({ snapshot }: ProofCenterPanelProps) {
         <p className="eyebrow">Testnet proof</p>
         <h2>Proof Center</h2>
         <p>One place for the payment evidence: Arc transfer, x402 settlement, autonomous agent payments, creator feed depth, and Flutterwave sandbox bridge status.</p>
+        <p className="proof-center-verified">Last verified: {formatUtc(snapshot.generatedAt)}</p>
       </div>
 
       <div className="proof-center-summary">
@@ -47,10 +62,16 @@ export function ProofCenterPanel({ snapshot }: ProofCenterPanelProps) {
             </div>
             <h3>{item.title}</h3>
             <p>{item.summary}</p>
+            {item.status === "missing" ? (
+              <p className="proof-coming-note">Proof artifact ships with the next pipeline run.</p>
+            ) : null}
             {item.href ? (
               <a href={item.href} target="_blank" rel="noreferrer">{item.proof ?? "Open proof"}</a>
             ) : item.proof ? (
               <code>{item.proof}</code>
+            ) : null}
+            {item.recordedAt ? (
+              <small className="proof-recorded-at">Recorded {formatUtc(item.recordedAt)}</small>
             ) : null}
             <small>{item.source}</small>
           </article>
