@@ -50,7 +50,7 @@ export async function requireClerkMutationAuth(options: ClerkMutationAuthOptions
   }
 
   const result = await (options.verifier ? options.verifier() : readCurrentClerkAuth());
-  if (!result.userId) throw new ClerkMutationAuthError("Clerk sign-in is required for this real testnet action.", 401);
+  if (!result.userId) throw new ClerkMutationAuthError("Wallet connection required", 401);
 
   return {
     userId: result.userId,

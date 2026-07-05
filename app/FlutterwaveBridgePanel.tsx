@@ -105,8 +105,9 @@ export function FlutterwaveBridgePanel({ initialState }: FlutterwaveBridgePanelP
           <p className="eyebrow">Fan funding</p>
           <h2>Fund with Naira</h2>
         </div>
-        {status.kind !== "idle" || status.message !== "Ready" ? <span className={"status-dot " + status.kind}>{status.message}</span> : null}
+        {status.kind !== "idle" && status.message !== "Ready" && status.message !== "Wallet connection required" ? <span className={"status-dot " + status.kind}>{status.message}</span> : null}
       </div>
+
 
       <div className="bridge-ledger fan-bridge-ledger">
         <Metric label="Verified balance" value={state ? formatNaira(state.verifiedNairaBalance) : "--"} detail={state ? formatUsdc(state.verifiedUsdcEquivalent) : "USDC available"} />

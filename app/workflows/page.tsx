@@ -35,7 +35,7 @@ export default async function WorkflowsPage({ searchParams }: WorkflowsPageProps
   const isCreator = mode === 'creator';
 
   return (
-    <main className='workflow-page'>
+    <main className='workflow-page' id='main-content'>
       <header className='landing-nav workflow-nav'>
         <a className='brand-lockup' href='/' aria-label='KoboLink home'>
           <span>KoboLink</span>

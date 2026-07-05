@@ -1,6 +1,12 @@
-import { ClerkMutationAuthError, requireClerkMutationAuth } from "../../src/auth/clerk-server.js";
+import { headers } from "next/headers";
+import { ClerkMutationAuthError } from "../../src/auth/clerk-server.js";
 
-export { requireClerkMutationAuth as requireAppMutationAuth };
+export async function requireAppMutationAuth() {
+  const headersList = await headers();
+  const walletAddress = headersList.get("x-wallet-address");
+  if (!walletAddress) throw new ClerkMutationAuthError("Wallet connection required", 401);
+  return { userId: walletAddress };
+}
 
 export function appAuthResponse(error: unknown): Response | null {
   if (!(error instanceof ClerkMutationAuthError)) return null;

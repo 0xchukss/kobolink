@@ -15,8 +15,13 @@ export function SiteFooter() {
         <div>
           <span>Rails</span>
           <a href='/workflows?mode=fan#proof-center'>Testnet receipts</a>
-          <a href='/workflows?mode=fan'>Arc settlement</a>
-          <a href='/workflows?mode=fan'>x402 payments</a>
+          <a href='/workflows?mode=fan#arc-transfer'>Arc settlement</a>
+          <a href='/workflows?mode=fan#x402-settlement'>x402 payments</a>
+        </div>
+        <div>
+          <span>Legal</span>
+          <a href='/privacy'>Privacy Policy</a>
+          <a href='/terms'>Terms of Service</a>
         </div>
       </div>
     </footer>

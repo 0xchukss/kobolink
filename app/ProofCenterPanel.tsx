@@ -40,7 +40,7 @@ export function ProofCenterPanel({ snapshot }: ProofCenterPanelProps) {
 
       <div className="proof-center-grid">
         {snapshot.items.map((item) => (
-          <article className={`proof-center-card ${item.status}`} key={item.id}>
+          <article className={`proof-center-card ${item.status}`} key={item.id} id={item.id}>
             <div>
               <span>{item.rail}</span>
               <strong>{statusLabels[item.status]}</strong>

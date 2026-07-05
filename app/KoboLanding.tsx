@@ -51,7 +51,7 @@ const howItWorks = [
 
 export function KoboLanding({ stats, proof }: KoboLandingProps) {
   return (
-    <main className='landing-shell'>
+    <main className='landing-shell' id='main-content'>
       <LandingMotion />
       <header className='landing-nav nav-animate'>
         <a className='brand-lockup' href='#top' aria-label='KoboLink home'>

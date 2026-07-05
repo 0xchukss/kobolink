@@ -283,8 +283,9 @@ export function CreatorListingApp({ mode, initialItems, initialMeta, initialPaym
               <p className='eyebrow'>Listing wizard</p>
               <h2>Creator listing</h2>
             </div>
-            {status.kind !== 'idle' || status.message !== 'Ready' ? <span className={'status-dot ' + status.kind}>{status.message}</span> : null}
+            {status.kind !== 'idle' && status.message !== 'Ready' && status.message !== "Wallet connection required" ? <span className={'status-dot ' + status.kind}>{status.message}</span> : null}
           </div>
+
 
           <div className='wizard-progress' aria-label='Creator listing progress'>
             {wizardSteps.map((step, index) => (

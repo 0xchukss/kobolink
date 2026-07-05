@@ -23,7 +23,7 @@ export default function UseLinkPage() {
   const configured = clerkConfigured();
 
   return (
-    <main className='signin-shell'>
+    <main className='signin-shell' id='main-content'>
       <header className='landing-nav workflow-nav'>
         <a className='brand-lockup' href='/' aria-label='KoboLink home'>
           <span>KoboLink</span>

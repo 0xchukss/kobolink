@@ -6,16 +6,21 @@ type AppAuthFetch = (input: RequestInfo | URL, init?: RequestInit) => Promise<Re
 
 const AppApiAuthContext = createContext<AppAuthFetch | null>(null);
 
+import { useAccount } from 'wagmi';
+
 export function AppApiAuthProvider({ children }: { children: ReactNode }) {
+  const { address } = useAccount();
+
   const authFetch = useCallback<AppAuthFetch>(async (input, init = {}) => {
+    const headers = new Headers(init.headers);
+    if (address) headers.set('x-wallet-address', address);
+
     return fetch(input, {
       ...init,
       credentials: init.credentials ?? 'same-origin',
-      headers: {
-        ...(init.headers ?? {}),
-      },
+      headers,
     });
-  }, []);
+  }, [address]);
 
   return <AppApiAuthContext.Provider value={authFetch}>{children}</AppApiAuthContext.Provider>;
 }

@@ -1,0 +1,30 @@
+{
+  "project": "KoboLink",
+  "phase": "real-single-creator-tip",
+  "recordedAt": "2026-06-29T18:16:15.000Z",
+  "success": true,
+  "requestedListingId": "listing-8314cfad-7ae5-4406-9b51-64eef7cb0bff",
+  "listing": {
+    "id": "listing-8314cfad-7ae5-4406-9b51-64eef7cb0bff",
+    "creatorHandle": "@klstzjgu6d",
+    "creatorWallet": "0x68e7DB2E572e0e58bea085b28689b9948DF70aAD",
+    "title": "How startup communities can fund useful X threads",
+    "xPostUrl": "https://x.com/klstzjgu6d/status/123456",
+    "postContent": "How startup communities can fund useful X threads",
+    "mediaUrls": [],
+    "amountNgn": 150,
+    "amountUsdc": 0.096774,
+    "x402PaymentPath": "/x402/pay/listing-8314cfad-7ae5-4406-9b51-64eef7cb0bff"
+  },
+  "payment": {},
+  "settlement": {
+    "logId": "tip-listing-8314cfad-7ae5-4406-9b51-64eef7cb0bff-20260629181608203",
+    "transactionHash": "42837b7a-f604-4d36-8553-2d8f2e27c28b",
+    "paymentReceipt": "42837b7a-f604-4d36-8553-2d8f2e27c28b",
+    "receiptUrl": "https://gateway-api-testnet.circle.com/v1/transfers/42837b7a-f604-4d36-8553-2d8f2e27c28b",
+    "network": "eip155:5042002",
+    "payer": "0x6baeb217dbf5b53c9a1ba88750fff6c0ca7931e3",
+    "settledAt": "2026-06-29T18:16:08.203Z"
+  },
+  "matchedCurrentFeedLog": true
+}

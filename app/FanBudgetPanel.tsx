@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useAppKit } from "@reown/appkit/react";
+import { useAccount, useSendTransaction, usePublicClient } from "wagmi";
+import { parseUnits } from "viem";
 import { useAppAuthFetch } from "./AppApiAuthContext.js";
 
 import type { BudgetLedger, FanBudget, GatewayBalanceSnapshot } from "../src/budgets/fan-budget.js";
@@ -36,14 +39,31 @@ export function FanBudgetPanel({ categories, ngnPerUsdc, showSetup = true, showA
   const [period, setPeriod] = useState<"daily" | "weekly">("weekly");
   const [depositUsdc, setDepositUsdc] = useState("");
   const [status, setStatus] = useState<PanelStatus>({ kind: "idle", message: "Ready" });
+  const { open } = useAppKit();
+  const { isConnected } = useAccount();
+  const { sendTransactionAsync } = useSendTransaction();
+  const publicClient = usePublicClient();
+  const [pendingAction, setPendingAction] = useState<"authorize" | "deposit" | "run" | null>(null);
+
+  useEffect(() => {
+    if (isConnected && pendingAction) {
+      const action = pendingAction;
+      setPendingAction(null);
+      if (action === "authorize") void authorizeBudget();
+      else if (action === "deposit") void depositToGateway();
+      else if (action === "run") void runAgent();
+    }
+  }, [isConnected, pendingAction]);
+
   const policyCategories = useMemo(() => {
     const valid = categories.filter((category): category is CreatorCategory => isCreatorCategory(category));
     return valid.length ? valid : fallbackPolicyCategories;
   }, [categories]);
 
   useEffect(() => {
+    if (!isConnected) return;
     let active = true;
-    fetch("/api/fan-budget", { cache: "no-store" })
+    authFetch("/api/fan-budget", { cache: "no-store" })
       .then(async (response) => {
         const payload = await response.json() as BudgetState & { error?: string };
         if (!response.ok) throw new Error(payload.error ?? "Could not load budget");
@@ -66,9 +86,15 @@ export function FanBudgetPanel({ categories, ngnPerUsdc, showSetup = true, showA
     return () => {
       active = false;
     };
-  }, []);
+  }, [authFetch, isConnected]);
 
   async function authorizeBudget() {
+    if (!isConnected) {
+      setPendingAction("authorize");
+      void open();
+      return;
+    }
+
     setStatus({ kind: "loading", message: "Checking Gateway balance" });
     setDecisions([]);
 
@@ -103,9 +129,36 @@ export function FanBudgetPanel({ categories, ngnPerUsdc, showSetup = true, showA
       return;
     }
 
-    setStatus({ kind: "loading", message: "Depositing USDC to Gateway" });
+    if (!isConnected) {
+      setPendingAction("deposit");
+      void open();
+      return;
+    }
 
     try {
+      let fanAddress = state.wallet?.fanAddress;
+
+      if (!fanAddress) {
+        setStatus({ kind: "loading", message: "Provisioning agent wallet..." });
+        const res = await authFetch("/api/fan-budget", { cache: "no-store" });
+        const payload = await res.json() as BudgetState & { error?: string, agentWallet?: { address: string } };
+        if (!res.ok) throw new Error(payload.error ?? "Could not provision agent wallet");
+        setState(payload);
+        fanAddress = payload.wallet?.fanAddress ?? payload.agentWallet?.address;
+        if (!fanAddress) throw new Error("Agent wallet not provisioned yet.");
+      }
+
+      setStatus({ kind: "loading", message: "Awaiting wallet approval..." });
+      
+      const hash = await sendTransactionAsync({
+        to: fanAddress as `0x${string}`,
+        value: parseUnits(amountUsdc.toString(), 18),
+      });
+
+      setStatus({ kind: "loading", message: "Sending USDC to Agent Wallet..." });
+      await publicClient!.waitForTransactionReceipt({ hash });
+
+      setStatus({ kind: "loading", message: "Depositing USDC to Circle Gateway..." });
       const response = await authFetch("/api/gateway/fund", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -125,6 +178,12 @@ export function FanBudgetPanel({ categories, ngnPerUsdc, showSetup = true, showA
   }
 
   async function runAgent() {
+    if (!isConnected) {
+      setPendingAction("run");
+      void open();
+      return;
+    }
+
     setStatus({ kind: "loading", message: "Settling x402 tips" });
 
     try {
@@ -165,8 +224,9 @@ export function FanBudgetPanel({ categories, ngnPerUsdc, showSetup = true, showA
           <p className="eyebrow">{showSetup ? "USDC agent wallet" : "Autonomous agent"}</p>
           <h2>{showSetup ? "Fund agent budget" : "Run paying agent"}</h2>
         </div>
-        {status.kind !== "idle" || status.message !== "Ready" ? <span className={"status-dot " + status.kind}>{status.message}</span> : null}
+        {status.kind !== "idle" && status.message !== "Ready" && status.message !== "Wallet connection required" ? <span className={"status-dot " + status.kind}>{status.message}</span> : null}
       </div>
+
 
       {showSetup ? (
         <>
