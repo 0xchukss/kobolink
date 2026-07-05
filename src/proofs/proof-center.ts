@@ -1,8 +1,9 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 
-import { readFanBudget } from "../budgets/budget-store.js";
-import { readFanGatewayBalance } from "../budgets/gateway-balance.js";
+import { readFanBudget, readFanBudgetForOwner } from "../budgets/budget-store.js";
+import { readFanGatewayBalance, readGatewayBalanceForPrivateKey } from "../budgets/gateway-balance.js";
 import type { FanBudget, GatewayBalanceSnapshot } from "../budgets/fan-budget.js";
+import { ensureUserAgentWallet } from "../agents/user-agent-wallets.js";
 
 import type { BridgeWithdrawalReceipt, FlutterwaveDepositReceipt } from "../flutterwave/bridge.js";
 import { isAcceptedPayoutBackedBySettledTips } from "../flutterwave/withdrawal-guard.js";
@@ -38,6 +39,7 @@ export type ProofCenterOptions = {
   bridgeCheckoutProofPath?: string;
   bridgeDepositProofPath?: string;
   bridgePayoutProofPath?: string;
+  owner?: string;
 };
 
 type GatewayEvidence = {
@@ -126,7 +128,7 @@ export async function readProofCenterSnapshot(now = new Date().toISOString(), op
     readPublicCreatorFeed(),
     readPaymentState(),
     readBridgeState(),
-    readFanBudget(),
+    options.owner ? readFanBudgetForOwner(options.owner) : readFanBudget(),
     readJsonIfExists<Day1Proof>("proofs/day1.json"),
     readJsonIfExists<Day5Proof>(options.day5ProofPath ?? "proofs/day5.json"),
     readJsonIfExists<StrictBridgeCheckoutProof>(options.bridgeCheckoutProofPath ?? "proofs/real-bridge-checkout.json"),
@@ -222,6 +224,17 @@ function sameAddress(left: string | undefined, right: string | undefined): boole
 async function readGatewayEvidence(args: { budget: FanBudget | null; day1?: Day1Proof; options: ProofCenterOptions }): Promise<GatewayEvidence> {
   if (args.options.liveGateway) {
     try {
+      if (args.options.owner) {
+        const agentWallet = await ensureUserAgentWallet(args.options.owner);
+        const wallet = await readGatewayBalanceForPrivateKey(agentWallet.privateKey, args.budget?.budgetUsdc ?? 0);
+        return {
+          ok: true,
+          source: "live Circle Gateway (Agent Wallet)",
+          fanAddress: wallet.fanAddress,
+          gatewayAvailableUsdc: wallet.gatewayAvailableUsdc,
+        };
+      }
+
       const reader = args.options.gatewayReader ?? readFanGatewayBalance;
       const wallet = await reader(args.budget?.budgetUsdc ?? 0);
       return {

@@ -5,6 +5,7 @@ export function SiteFooter() {
         <div>
           <a className='brand-lockup' href='/' aria-label='KoboLink home'>KoboLink</a>
           <p>Autonomous nanopayments for Nigerian creator communities, priced locally and settled on Arc in USDC.</p>
+          <small style={{ display: 'block', marginTop: '1rem', opacity: 0.6 }}>&copy; 2026 KoboLink</small>
         </div>
         <div>
           <span>Legal</span>

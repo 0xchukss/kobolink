@@ -19,6 +19,8 @@ type KoboLandingProps = {
     defaultTip: string;
     defaultTipUsdc: string;
     exchangeRate: string;
+    blockNumber?: string;
+    lastRefreshed?: string;
   };
   proof: TestnetProof;
 };
@@ -85,7 +87,7 @@ export function KoboLanding({ stats, proof }: KoboLandingProps) {
       <section className='metric-band' id='proof' aria-label='Live testnet proof metrics'>
         <div className='metric-tile'>
           <span>Arc chain</span>
-          <strong>{proof.chainId}</strong>
+          <strong>{proof.chainId} {stats.blockNumber ? `(#${stats.blockNumber})` : ''}</strong>
         </div>
         <div className='metric-tile'>
           <span>Arc transfer</span>
@@ -100,6 +102,11 @@ export function KoboLanding({ stats, proof }: KoboLandingProps) {
           <strong>{stats.defaultTip}</strong>
         </div>
       </section>
+      {stats.lastRefreshed ? (
+        <div style={{ textAlign: 'center', marginTop: '-1rem', marginBottom: '2rem', fontSize: '0.8rem', opacity: 0.6 }}>
+          Live data retrieved at {stats.lastRefreshed}
+        </div>
+      ) : null}
 
       <section className='settlement-strip reveal-block' aria-hidden='true'>
         <div className='strip-line'>Naira budget / creator listing / agent decision / x402 payment / Arc USDC settlement / Flutterwave bridge /</div>
@@ -144,6 +151,16 @@ export function KoboLanding({ stats, proof }: KoboLandingProps) {
           <span>Naira display rate</span>
           <strong>{stats.exchangeRate} per 1 USDC</strong>
         </article>
+      </section>
+
+      <section className='reveal-block' style={{ padding: '0 clamp(16px, 4vw, 56px) clamp(48px, 8vw, 96px)', textAlign: 'center' }}>
+        <h2 style={{ fontSize: 'clamp(28px, 3.8vw, 48px)', marginBottom: '1rem' }}>Creator Listing Dashboard</h2>
+        <p style={{ maxWidth: '600px', margin: '0 auto 2rem', opacity: 0.8 }}>
+          Here is a preview of how creators manually attach X posts to receive Naira-equivalent USDC tips settled on Arc.
+        </p>
+        <div style={{ maxWidth: '1000px', margin: '0 auto', border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden', background: '#11170f' }}>
+          <img src="/screenshots/creator-real-x-proof-gate.png" alt="Creator Listing Dashboard Preview" style={{ width: '100%', display: 'block' }} />
+        </div>
       </section>
 
       <section className='landing-cta-section reveal-block'>

@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises';
-
+import { createPublicClient, http } from 'viem';
+import { arcTestnet } from '../src/payments/arc.js';
 import { config } from '../src/config/env.js';
 import { readX402ProofEvidence, type Day1Proof } from '../src/proofs/day1-evidence.js';
 import { formatNaira, formatUsdc } from '../src/utils/currency.js';
@@ -19,7 +20,23 @@ type LandingProof = {
 };
 
 export default async function Page() {
-  const proof = await readLandingProof();
+  const publicClient = createPublicClient({
+    chain: arcTestnet,
+    transport: http(config.arc.rpcUrl),
+  });
+
+  const [proof, blockNumber] = await Promise.all([
+    readLandingProof(),
+    publicClient.getBlockNumber().catch(() => null),
+  ]);
+
+  const lastRefreshed = new Date().toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZone: 'UTC',
+    timeZoneName: 'short'
+  });
 
   return (
     <KoboLanding
@@ -27,6 +44,8 @@ export default async function Page() {
         defaultTip: formatNaira(config.economics.defaultTipNgn),
         defaultTipUsdc: formatUsdc(config.economics.defaultTipNgn / config.economics.ngnPerUsdc),
         exchangeRate: formatNaira(config.economics.ngnPerUsdc),
+        blockNumber: blockNumber ? String(blockNumber) : undefined,
+        lastRefreshed,
       }}
       proof={proof}
     />

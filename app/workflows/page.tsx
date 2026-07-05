@@ -1,3 +1,4 @@
+import { headers } from 'next/headers';
 import { config } from '../../src/config/env.js';
 import { readPublicCreatorFeed } from '../../src/creator/listing-store.js';
 import { CREATOR_CATEGORIES, TIP_PRESETS_NGN } from '../../src/creator/listings.js';
@@ -26,10 +27,13 @@ export default async function WorkflowsPage({ searchParams }: WorkflowsPageProps
   const requestedMode = params?.mode ?? params?.role;
   const mode: WorkflowMode = requestedMode === 'creator' ? 'creator' : 'fan';
   const items = await readPublicCreatorFeed();
+  const headersList = await headers();
+  const walletAddress = headersList.get("x-wallet-address") ?? undefined;
+
   const [paymentState, bridgeState, proofCenter] = await Promise.all([
     readPaymentStateForFeed(items),
     readBridgeState(),
-    readProofCenterSnapshot(new Date().toISOString(), { liveGateway: true }),
+    readProofCenterSnapshot(new Date().toISOString(), { liveGateway: true, owner: walletAddress }),
   ]);
 
   const isCreator = mode === 'creator';
