@@ -6,6 +6,7 @@ import { config } from "../../../src/config/env.js";
 import { isCreatorCategory, type CreatorCategory } from "../../../src/creator/listings.js";
 import { ngnToUsdc } from "../../../src/utils/currency.js";
 import { appAuthResponse, requireAppMutationAuth } from "../app-auth-response.js";
+import { getUsdcContractAddress } from "../../../src/payments/x402-gateway.js";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +27,8 @@ export async function GET() {
     const budget = await readFanBudgetForOwner(auth.userId);
     const wallet = await readGatewayBalanceForPrivateKey(agentWallet.privateKey, budget?.budgetUsdc ?? 0);
     const state = await readStoredBudgetStateForOwner(auth.userId, wallet);
-    return Response.json({ ...state, agentWallet: publicAgentWallet(agentWallet.address) });
+    const usdcTokenAddress = await getUsdcContractAddress().catch(() => null);
+    return Response.json({ ...state, agentWallet: publicAgentWallet(agentWallet.address), usdcTokenAddress });
   } catch (error) {
     const authResponse = appAuthResponse(error);
     if (authResponse) return authResponse;
@@ -58,8 +60,9 @@ export async function POST(request: Request) {
 
     await writeFanBudgetForOwner(auth.userId, budget);
     const state = await readStoredBudgetStateForOwner(auth.userId, wallet);
+    const usdcTokenAddress = await getUsdcContractAddress().catch(() => null);
 
-    return Response.json({ ...state, agentWallet: publicAgentWallet(agentWallet.address) }, { status: 201 });
+    return Response.json({ ...state, agentWallet: publicAgentWallet(agentWallet.address), usdcTokenAddress }, { status: 201 });
   } catch (error) {
     const authResponse = appAuthResponse(error);
     if (authResponse) return authResponse;

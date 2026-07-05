@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useAppKit } from "@reown/appkit/react";
-import { useAccount, useSendTransaction, usePublicClient } from "wagmi";
+import { useAccount, useSendTransaction, usePublicClient, useWriteContract } from "wagmi";
 import { parseUnits } from "viem";
 import { useAppAuthFetch } from "./AppApiAuthContext.js";
 
@@ -14,6 +14,7 @@ type BudgetState = {
   budget: FanBudget | null;
   ledger: BudgetLedger | null;
   wallet: GatewayBalanceSnapshot | null;
+  usdcTokenAddress?: string | null;
 };
 
 type FanBudgetPanelProps = {
@@ -28,11 +29,24 @@ type PanelStatus = {
   message: string;
 };
 
+const erc20Abi = [
+  {
+    type: "function",
+    name: "transfer",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "recipient", type: "address" },
+      { name: "amount", type: "uint256" },
+    ],
+    outputs: [{ type: "bool" }],
+  },
+] as const;
+
 const fallbackPolicyCategories: CreatorCategory[] = ["ai", "fintech", "startups", "news", "music", "crypto"];
 
 export function FanBudgetPanel({ categories, ngnPerUsdc, showSetup = true, showAgentRunner = true }: FanBudgetPanelProps) {
   const authFetch = useAppAuthFetch();
-  const [state, setState] = useState<BudgetState>({ budget: null, ledger: null, wallet: null });
+  const [state, setState] = useState<BudgetState>({ budget: null, ledger: null, wallet: null, usdcTokenAddress: null });
   const [decisions, setDecisions] = useState<PaymentAgentDecision[]>([]);
   const [budgetNgn, setBudgetNgn] = useState("2000");
   const [maxTipNgn, setMaxTipNgn] = useState("250");
@@ -43,6 +57,7 @@ export function FanBudgetPanel({ categories, ngnPerUsdc, showSetup = true, showA
   const { isConnected } = useAccount();
   const { sendTransactionAsync } = useSendTransaction();
   const publicClient = usePublicClient();
+  const { writeContractAsync } = useWriteContract();
   const [pendingAction, setPendingAction] = useState<"authorize" | "deposit" | "run" | null>(null);
 
   useEffect(() => {
@@ -148,11 +163,16 @@ export function FanBudgetPanel({ categories, ngnPerUsdc, showSetup = true, showA
         if (!fanAddress) throw new Error("Agent wallet not provisioned yet.");
       }
 
+      const usdcAddress = state.usdcTokenAddress;
+      if (!usdcAddress) throw new Error("USDC token address could not be resolved. Verify Circle Gateway connectivity.");
+
       setStatus({ kind: "loading", message: "Awaiting wallet approval..." });
       
-      const hash = await sendTransactionAsync({
-        to: fanAddress as `0x${string}`,
-        value: parseUnits(amountUsdc.toString(), 18),
+      const hash = await writeContractAsync({
+        address: usdcAddress as `0x${string}`,
+        abi: erc20Abi,
+        functionName: "transfer",
+        args: [fanAddress as `0x${string}`, parseUnits(amountUsdc.toString(), 6)],
       });
 
       setStatus({ kind: "loading", message: "Sending USDC to Agent Wallet..." });

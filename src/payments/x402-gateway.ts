@@ -276,6 +276,13 @@ export async function requireListing(listingId: string): Promise<FeedItem> {
   return listing;
 }
 
+export async function getUsdcContractAddress(): Promise<string> {
+  const kind = await getArcGatewayKind();
+  const asset = usdcAddress(kind);
+  if (!asset) throw new Error("Circle Gateway did not advertise a USDC asset.");
+  return asset;
+}
+
 function paymentRequiredResponse(request: Request, listing: FeedItem, requirements: PaymentRequirements): Response {
   return jsonResponse(
     {
