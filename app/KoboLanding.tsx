@@ -85,6 +85,7 @@ export function KoboLanding({ stats, proof }: KoboLandingProps) {
       <LandingMotion />
       <header className='landing-nav nav-animate'>
         <a className='brand-lockup' href='#top' aria-label='KoboLink home'>
+          <img src="/icon.png" alt="" style={{ width: '24px', height: '24px', marginRight: '8px', borderRadius: '4px' }} />
           <span>KoboLink</span>
         </a>
         <nav aria-label='KoboLink landing navigation'>

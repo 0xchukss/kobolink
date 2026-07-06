@@ -10,6 +10,7 @@ export default function PrivacyPage() {
     <main className='workflow-page' id='main-content'>
       <header className='landing-nav workflow-nav'>
         <a className='brand-lockup' href='/' aria-label='KoboLink home'>
+          <img src="/icon.png" alt="" style={{ width: '24px', height: '24px', marginRight: '8px', borderRadius: '4px' }} />
           <span>KoboLink</span>
         </a>
         <nav aria-label='KoboLink navigation'>
